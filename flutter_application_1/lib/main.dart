@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
           
           drawer: const MenuLateral(),
           body: Center(
-            child: Text("Alberto Enrique Pulido \n hola",
-            style: GoogleFonts.acme(color: const Color.fromARGB(255, 114, 7, 255), fontSize: 35)),
+            child: Text("Alberto Enrique Pulido \nhttps://github.com/AlbertoEP123/flutterEjer",
+            style: GoogleFonts.abel(color: const Color.fromARGB(255, 114, 7, 255), fontSize: 35)),
             
            
       ),
