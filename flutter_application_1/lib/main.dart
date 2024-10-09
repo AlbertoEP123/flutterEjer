@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 import '/MenuLateral.dart';
@@ -14,17 +15,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Ejemplo de drawer',
+        title: 'Drawer',
         
         home: Scaffold(
           appBar: AppBar(
-            title: const Text("Ejemplo de Drawear"),
+            title: const Text("Drawer"),
           ),
           
           drawer: const MenuLateral(),
-          body: const Center(
-            child: Text("Parte principal"),
-          ),
+          body: Center(
+            child: Text("Alberto Enrique Pulido \n hola",
+            style: GoogleFonts.acme(color: const Color.fromARGB(255, 114, 7, 255), fontSize: 35)),
+            
+           
+      ),
         ));
   }
 }

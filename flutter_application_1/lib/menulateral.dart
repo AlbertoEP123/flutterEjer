@@ -13,8 +13,8 @@ class MenuLateral extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           const UserAccountsDrawerHeader(
-            accountName: Text("Actividad Flutter 1"),
-            accountEmail: Text("aenrpul472@g.educaand.es"),
+            accountName: Text("Actividad Flutter 1", style: TextStyle(color: Colors.black),) ,
+            accountEmail: Text("aenrpul472@g.educaand.es",style: TextStyle(color: Colors.black),) ,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("image.png"),
