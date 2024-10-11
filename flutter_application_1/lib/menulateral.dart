@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Ejercicio4.dart';
+import 'package:flutter_application_1/ejercicio4.dart';
+import 'package:flutter_application_1/ejercicio5.dart';
+import 'package:flutter_application_1/ejercicio6.dart';
+import 'package:flutter_application_1/ejercicio7.dart';
+import 'package:flutter_application_1/main.dart';
 import 'Ejercicio2.dart';
 import 'Ejercicio3.dart';
 
@@ -12,18 +16,26 @@ class MenuLateral extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        
         children: <Widget>[
           const UserAccountsDrawerHeader(
-            ListTile(
-accountName: Text("Actividad Flutter 1", style: TextStyle(color: Colors.black),) ,
+            
+            accountName: Text("Actividad Flutter 1", style: TextStyle(color: Colors.black),) ,
             accountEmail: Text("aenrpul472@g.educaand.es",style: TextStyle(color: Colors.black),) ,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("image.png"),
                     fit: BoxFit.cover)),
           ),
-            ),
+         ListTile(
+            title: const Text("1. Inicio"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const MyApp()));
+            },
             
+          ),
           Ink(
             color: Colors.indigo,
             child: ListTile(
@@ -53,6 +65,30 @@ accountName: Text("Actividad Flutter 1", style: TextStyle(color: Colors.black),)
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const Ejercicio4()));
+            },
+           ),
+           ListTile(
+            title: const Text("5. Ejercicio resuelto"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const Ejercicio5()));
+            },
+           ),
+            ListTile(
+            title: const Text("6. Ejercicio telefonos"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const Ejercicio6()));
+            },
+           ),
+             ListTile(
+            title: const Text("7. Filas y columnas anidadas"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const Ejercicio7()));
             },
            ),
            
