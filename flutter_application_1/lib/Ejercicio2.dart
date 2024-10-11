@@ -21,17 +21,17 @@ class Ejercicio2 extends StatelessWidget {
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.asset("assets/image2.png", fit: BoxFit.cover),
+                child: Image.asset("assets/image.png", fit: BoxFit.cover),
               ),
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.asset("assets/image2.png", fit: BoxFit.cover),
+                child: Image.asset("assets/image.png", fit: BoxFit.cover),
               ),
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.asset("assets/image2.png", fit: BoxFit.cover),
+                child: Image.asset("assets/image.png", fit: BoxFit.cover),
               ),
             ],
           ),

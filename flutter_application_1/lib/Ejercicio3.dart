@@ -16,19 +16,19 @@ class Ejercicio3 extends StatelessWidget {
             SizedBox(
               width: 100,
               height: 100,
-              child: Image.asset("assets/image2.png", fit: BoxFit.cover),
+              child: Image.asset("assets/image.png", fit: BoxFit.cover),
             ),
             const SizedBox(height: 10), // Espacio entre imágenes
             SizedBox(
               width: 100,
               height: 100,
-              child: Image.asset("assets/image2.png", fit: BoxFit.cover),
+              child: Image.asset("assets/image.png", fit: BoxFit.cover),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: 100,
               height: 100,
-              child: Image.asset("assets/image2.png", fit: BoxFit.cover),
+              child: Image.asset("assets/image.png", fit: BoxFit.cover),
             ),
           ],
         ),
