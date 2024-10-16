@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'menulateral.dart';
+import 'package:flutter_application_1/ejercicios/menulateral.dart';
 
 class Ejercicio2 extends StatelessWidget {
   const Ejercicio2({super.key});

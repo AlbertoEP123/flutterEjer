@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicio4.dart';
-import 'package:flutter_application_1/ejercicio5.dart';
-import 'package:flutter_application_1/ejercicio6.dart';
-import 'package:flutter_application_1/ejercicio7.dart';
+
+import 'package:flutter_application_1/ejercicios/ejercicio4.dart';
+import 'package:flutter_application_1/ejercicios/ejercicio5.dart';
+import 'package:flutter_application_1/ejercicios/ejercicio6.dart';
+import 'package:flutter_application_1/ejercicios/ejercicio7.dart';
 import 'package:flutter_application_1/main.dart';
 import 'Ejercicio2.dart';
 import 'Ejercicio3.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ejercicios/menulateral.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-import '/MenuLateral.dart';
 
 void main() => runApp(const MyApp());
 

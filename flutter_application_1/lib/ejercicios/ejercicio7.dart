@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'menulateral.dart';
+import 'package:flutter_application_1/ejercicios/menulateral.dart';
 
 class Ejercicio7 extends StatelessWidget {
   const Ejercicio7({super.key});
@@ -51,7 +51,7 @@ class Ejercicio7 extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 50), // Espacio entre filas
+          const SizedBox(height: 50), 
         
         ],
       ),
