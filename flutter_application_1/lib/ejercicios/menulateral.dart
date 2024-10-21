@@ -4,6 +4,7 @@ import 'package:flutter_application_1/ejercicios/ejercicio4.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio5.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio6.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio7.dart';
+import 'package:flutter_application_1/ejercicios/ejercicio8.dart';
 import 'package:flutter_application_1/main.dart';
 import 'Ejercicio2.dart';
 import 'Ejercicio3.dart';
@@ -92,6 +93,15 @@ class MenuLateral extends StatelessWidget {
                   builder: (BuildContext context) => const Ejercicio7()));
             },
            ),
+            ListTile(
+            title: const Text("7. Filas y columnas anidadas"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const Ejercicio8()));
+            },
+           ),
+           
           
            
         ],
