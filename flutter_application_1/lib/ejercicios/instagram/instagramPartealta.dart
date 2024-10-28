@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-class Ejercicio8 extends StatelessWidget {
-  const Ejercicio8({super.key});
+class Instagrampartealta extends StatelessWidget {
+  const Instagrampartealta({super.key});
 
 
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
+      appBar: AppBar(),
+      
       body: Column(
         children: [
           Container(
@@ -25,7 +28,7 @@ class Ejercicio8 extends StatelessWidget {
             
           ),
            const SizedBox(width:15),
-           Expanded(child: Column(
+           const Expanded(child: Column(
                 crossAxisAlignment:
                         CrossAxisAlignment.start, 
            ),
