@@ -4,7 +4,7 @@ import 'package:flutter_application_1/ejercicios/ejercicio4.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio5.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio6.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio7.dart';
-import 'package:flutter_application_1/ejercicios/instagram/instagramPartealta.dart';
+import 'package:flutter_application_1/ejercicios/instagram/instagram_parte_alta.dart';
 import 'package:flutter_application_1/main.dart';
 import 'Ejercicio2.dart';
 import 'Ejercicio3.dart';
