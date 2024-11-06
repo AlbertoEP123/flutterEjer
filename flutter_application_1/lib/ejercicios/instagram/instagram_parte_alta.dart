@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ejercicios/instagram/instagram_destacadas.dart';
 
 class Instagrampartealta extends StatelessWidget {
   const Instagrampartealta({
@@ -27,100 +28,97 @@ class Instagrampartealta extends StatelessWidget {
               ],
             ),
           ),
-          // Container avatar y publicaciones..
+          // Container avatar, publicaciones y biografía en el mismo contenedor
           Container(
-            padding: const EdgeInsets.all(30),
+            padding: const EdgeInsets.all(12),
             color: const Color.fromARGB(255, 255, 255, 255),
-            child: Row(
+            child: Column(
               children: [
-                const CircleAvatar(
-                  radius: 40,
-                  backgroundImage: AssetImage(''),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // avatar
+                Row(
+                  children: [
+                    const CircleAvatar(
+                      radius: 40,
+                      backgroundImage: AssetImage(''), 
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '1026\nPublicaciones',
-                            style: TextStyle(fontSize: 12),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                '1026\nPublicaciones',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              SizedBox(width: 1),
+                              Text(
+                                '859\nSeguidores',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              SizedBox(width: 1),
+                              Text(
+                                '211\nSeguidos',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 1),
-                          Text(
-                            '859\nSeguidores',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          SizedBox(width: 1),
-                          Text(
-                            '211\nSeguidos',
-                            style: TextStyle(fontSize: 12),
+                          const SizedBox(height: 8),
+                          // Editar perfil
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, bottom: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(3),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 148, 148, 148),
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    width: 345,
+                                    height: 28,
+                                    alignment: Alignment.center,
+                                    child: const Text(
+                                      'Editar perfil',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      // Container biografia
-                      Container(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        child: const Column(
-                          children: [
-                            Text(
-                              "Fernando Álvarez del Vayo\nNunca sabes lo que te depara el futuro",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                           
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        // editar perfil
-                        padding: const EdgeInsets.only(left: 50),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(3),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 148, 148, 148),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                width: 240,
-                                height: 28,
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'Editar perfil',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // biografía 
+                const Text(
+                  "Fernando Álvarez del Vayo\n\nNunca sabes lo que te depara el futuro",
+                  style: TextStyle(fontSize: 14),
+                  textAlign: TextAlign.left,
                 ),
               ],
             ),
           ),
+          Expanded(child: InstagramDestacadas()),
         ],
       ),
+      
+      
     );
   }
 }
