@@ -3,6 +3,7 @@ import 'package:flutter_application_1/ejercicios/ejercicio4.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio5.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio6.dart';
 import 'package:flutter_application_1/ejercicios/ejercicio7.dart';
+import 'package:flutter_application_1/ejercicios/ejercicio9.dart';
 import 'package:flutter_application_1/ejercicios/instagram/instagram_parte_alta.dart';
 import 'package:flutter_application_1/main.dart';
 import 'Ejercicio2.dart';
@@ -94,6 +95,14 @@ class MenuLateral extends StatelessWidget {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const Instagrampartealta()));
+            },
+          ),
+           ListTile(
+            title: const Text("9. Imagenes Aleatorias"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const JuegoAleatorioScreen()));
             },
           ),
         ],
