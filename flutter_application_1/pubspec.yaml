@@ -27,5 +27,19 @@ flutter:
     - assets/ig.webp
     - assets/mens.webp
     - assets/was.webp
+    - assets/add.webp
+    - assets/arquitectura.webp
+    - assets/pilotando.webp
+    - assets/praga.webp
+    - assets/retratos.webp
+    - assets/avatar.webp
+    - assets/ciudad1.webp
+    - assets/fruta.webp
+    - assets/sandia.webp
+    - assets/zumo.webp
+    - assets/coco.webp
+    - assets/pmiento.webp
+
+
 
   uses-material-design: true

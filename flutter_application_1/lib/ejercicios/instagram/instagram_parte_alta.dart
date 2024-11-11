@@ -28,7 +28,7 @@ class Instagrampartealta extends StatelessWidget {
               ],
             ),
           ),
-          // Container avatar, publicaciones y biografía en el mismo contenedor
+          // Container avatar, publicaciones y biografía 
           Container(
             padding: const EdgeInsets.all(12),
             color: const Color.fromARGB(255, 255, 255, 255),
@@ -39,7 +39,7 @@ class Instagrampartealta extends StatelessWidget {
                   children: [
                     const CircleAvatar(
                       radius: 40,
-                      backgroundImage: AssetImage(''), 
+                      backgroundImage: AssetImage('avatar.webp'), 
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -113,7 +113,7 @@ class Instagrampartealta extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          ), // Container clase destacadas
           Expanded(child: InstagramDestacadas()),
         ],
       ),
