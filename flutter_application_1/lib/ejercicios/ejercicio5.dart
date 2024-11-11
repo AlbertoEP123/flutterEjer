@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ejercicios/drawer.dart';
 
 class Ejercicio5 extends StatelessWidget {
   const Ejercicio5({super.key});
@@ -9,6 +10,8 @@ class Ejercicio5 extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Ejercicio 5. Ejercicio ejemplo resuelto"),
       ),
+      drawer: MenuLateral(),
+
       body: Column(
         children: [
           // Encabezado

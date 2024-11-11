@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/ejercicios/instagram/instagram_destacadas.dart';
+import 'package:flutter_application_1/ejercicios/drawer.dart'; 
 
 class Instagrampartealta extends StatelessWidget {
   const Instagrampartealta({
@@ -9,7 +10,11 @@ class Instagrampartealta extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Instagram Parte Alta"), 
+      ),
+      drawer: const MenuLateral(),  
+
       body: Column(
         children: [
           // Container nombre usuario
@@ -114,11 +119,9 @@ class Instagrampartealta extends StatelessWidget {
               ],
             ),
           ), // Container clase destacadas
-          Expanded(child: InstagramDestacadas()),
+          Expanded(child: InstagramDestacadas()),  // Aquí va el widget de InstagramDestacadas
         ],
       ),
-      
-      
     );
   }
 }

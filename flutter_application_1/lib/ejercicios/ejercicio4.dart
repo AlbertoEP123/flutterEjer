@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ejercicios/drawer.dart';
 
 
 // ignore: camel_case_types
@@ -12,6 +13,7 @@ class Ejercicio4 extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Ejercicio 4. Mostar 5 iconos"),
       ),
+      drawer: MenuLateral(),
       body: const Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

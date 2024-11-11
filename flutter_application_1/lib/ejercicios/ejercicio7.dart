@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ejercicios/drawer.dart';
 
 class Ejercicio7 extends StatelessWidget {
   const Ejercicio7({super.key});
@@ -9,6 +10,8 @@ class Ejercicio7 extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Ejercicio 7. Filas y columnas anidadas"),
       ),
+      drawer: MenuLateral(),
+
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

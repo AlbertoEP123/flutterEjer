@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ejercicios/drawer.dart';
 
 
 
@@ -11,6 +12,8 @@ class Ejercicio6 extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Ejercicio 6. Ejercicio telefonos"),
       ),
+      drawer: MenuLateral(),
+
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
