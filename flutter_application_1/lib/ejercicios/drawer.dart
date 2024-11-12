@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/ejercicio4.dart';
-import 'package:flutter_application_1/ejercicios/ejercicio5.dart';
-import 'package:flutter_application_1/ejercicios/ejercicio6.dart';
-import 'package:flutter_application_1/ejercicios/ejercicio7.dart';
-import 'package:flutter_application_1/ejercicios/ejercicio9.dart';
-import 'package:flutter_application_1/ejercicios/instagram/instagram_parte_alta.dart';
-import 'package:flutter_application_1/main.dart';
-import 'Ejercicio2.dart';
-import 'Ejercicio3.dart';
+
 
 class MenuLateral extends StatelessWidget {
-  const MenuLateral({super.key}); // Aquí no es necesario el parámetro 'child'
+  const MenuLateral({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +23,7 @@ class MenuLateral extends StatelessWidget {
             title: const Text("1. Inicio"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const MyApp()));
+              Navigator.of(context).pushNamed('/');
             },
           ),
           Ink(
@@ -44,8 +35,7 @@ class MenuLateral extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => const Ejercicio2()));
+                Navigator.of(context).pushNamed('/ejercicio2');
               },
             ),
           ),
@@ -53,56 +43,49 @@ class MenuLateral extends StatelessWidget {
             title: const Text("3. Fotos en columna"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const Ejercicio3()));
+              Navigator.of(context).pushNamed('/ejercicio3');
             },
           ),
           ListTile(
             title: const Text("4. Iconos"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const Ejercicio4()));
+              Navigator.of(context).pushNamed('/ejercicio4');
             },
           ),
           ListTile(
             title: const Text("5. Ejercicio resuelto"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const Ejercicio5()));
+              Navigator.of(context).pushNamed('/ejercicio5');
             },
           ),
           ListTile(
             title: const Text("6. Ejercicio teléfonos"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const Ejercicio6()));
+              Navigator.of(context).pushNamed('/ejercicio6');
             },
           ),
           ListTile(
             title: const Text("7. Filas y columnas anidadas"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const Ejercicio7()));
+              Navigator.of(context).pushNamed('/ejercicio7');
             },
           ),
           ListTile(
             title: const Text("8. Instagram"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const Instagrampartealta()));
+              Navigator.of(context).pushNamed('/instagram');
             },
           ),
-           ListTile(
+          ListTile(
             title: const Text("9. Imagenes Aleatorias"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const JuegoAleatorioScreen()));
+              Navigator.of(context).pushNamed('/ejercicio9');
             },
           ),
         ],

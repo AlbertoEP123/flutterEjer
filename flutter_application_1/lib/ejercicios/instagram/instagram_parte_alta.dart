@@ -11,7 +11,7 @@ class Instagrampartealta extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Instagram Parte Alta"), 
+        title: const Text("Instagram"), 
       ),
       drawer: const MenuLateral(),  
 
