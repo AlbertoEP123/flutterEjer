@@ -16,8 +16,10 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   final Random _aleatorio = Random();
   late Timer _temporizador;
 
-  void _iniciarJuego() {
-    _puntos = 0;
+   void _iniciarJuego() {
+    setState(() {
+      _puntos = 0; 
+    });
     _mostrarImagenAleatoria();
     _iniciarTemporizador();
   }
@@ -25,8 +27,8 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   void _mostrarImagenAleatoria() {
     setState(() {
       _imagenVisible = true;
-      _posX = _aleatorio.nextDouble() * 800;
-      _posY = _aleatorio.nextDouble() * 1200;
+      _posX = _aleatorio.nextDouble() * 200 ;
+      _posY = _aleatorio.nextDouble() * 600;
     });
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -40,8 +42,12 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   }
 
   void _iniciarTemporizador() {
-    _temporizador = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (_puntos == 0) _iniciarJuego();
+    _temporizador = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_puntos > 0) {
+        _mostrarImagenAleatoria(); // Si el puntaje es mayor que 0, seguir mostrando imágenes
+      } else {
+        _temporizador.cancel(); // Detener el temporizador cuando los puntos sean 0
+      }
     });
   }
 
