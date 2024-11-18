@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/ejercicios/drawer.dart';
+
 class JuegoAleatorioScreen extends StatefulWidget {
   const JuegoAleatorioScreen({super.key});
 
@@ -16,9 +17,9 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   final Random _aleatorio = Random();
   late Timer _temporizador;
 
-   void _iniciarJuego() {
+  void _iniciarJuego() {
     setState(() {
-      _puntos = 0; 
+      _puntos = 0;
     });
     _mostrarImagenAleatoria();
     _iniciarTemporizador();
@@ -27,7 +28,7 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   void _mostrarImagenAleatoria() {
     setState(() {
       _imagenVisible = true;
-      _posX = _aleatorio.nextDouble() * 200 ;
+      _posX = _aleatorio.nextDouble() * 200;
       _posY = _aleatorio.nextDouble() * 600;
     });
 
@@ -46,7 +47,8 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
       if (_puntos > 0) {
         _mostrarImagenAleatoria(); // Si el puntaje es mayor que 0, seguir mostrando imágenes
       } else {
-        _temporizador.cancel(); // Detener el temporizador cuando los puntos sean 0
+        _temporizador
+            .cancel(); // Detener el temporizador cuando los puntos sean 0
       }
     });
   }
@@ -75,7 +77,7 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Juego Aleatorio')),
+      appBar: AppBar(title: const Text('Imagenes en posicion aleatoria')),
       drawer: MenuLateral(),
       body: Stack(
         children: [
@@ -91,7 +93,8 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
           Positioned(
             top: 50,
             left: 20,
-            child: Text('Puntos: $_puntos', style: const TextStyle(fontSize: 24)),
+            child:
+                Text('Puntos: $_puntos', style: const TextStyle(fontSize: 24)),
           ),
         ],
       ),
