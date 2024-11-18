@@ -72,9 +72,8 @@ class InstagramDestacadas extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20), // Separación entre las historias destacadas y la parte baja
-            // Ahora estamos utilizando un Expanded para InstagramParteBaja
-            const Expanded(child: InstagramParteBaja()),  // Aquí invocas la clase InstagramParteBaja directamente
+            const SizedBox(height: 20), 
+            const Expanded(child: InstagramParteBaja()), 
           ],
         ),
       ),
