@@ -44,7 +44,7 @@ class Instagrampartealta extends StatelessWidget {
                   children: [
                     const CircleAvatar(
                       radius: 40,
-                      backgroundImage: AssetImage('avatar.webp'), 
+                      backgroundImage: AssetImage('assets/avatar.webp'), 
                     ),
                     const SizedBox(width: 12),
                     Expanded(
