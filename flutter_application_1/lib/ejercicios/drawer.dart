@@ -14,7 +14,7 @@ class MenuLateral extends StatelessWidget {
             accountEmail: Text("aenrpul472@g.educaand.es", style: TextStyle(color: Colors.black)),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("image.png"),
+                image: AssetImage("assets/image.png"),
                 fit: BoxFit.cover,
               ),
             ),

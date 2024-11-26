@@ -89,7 +89,7 @@ class Instagrampartealta extends StatelessWidget {
                                       ),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    width: 345,
+                                    width: 260,
                                     height: 28,
                                     alignment: Alignment.center,
                                     child: const Text(
