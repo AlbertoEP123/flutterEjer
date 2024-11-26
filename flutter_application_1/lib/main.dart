@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_application_1/ejercicios/ejercicios.dart';
 
+import 'routes/app_routes.dart';
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -35,7 +37,14 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Drawer',
-      initialRoute: '/',
+      initialRoute: AppRoutes.home,  // Ruta principal desde approutes
+      routes: AppRoutes.routes,
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (context) => const HomeScreen());  // En caso de que la ruta no exista
+      },
+      //ESTO ERA LAS RUTAS NOMBRADAS, QUE YA NO LA USO POR USAR LAS RUTAS EXTERNAS DE ARRIBA
+      // LO DEJO COMENTADO PARA QUE SE VEA QUE ESTABA HECHO DE LA RELACION 3
+      /* initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
         '/ejercicio_2': (context) => const Ejercicio2(),
@@ -46,7 +55,7 @@ class MyApp extends StatelessWidget {
         '/ejercicio_7': (context) => const Ejercicio7(),
         '/instagram': (context) =>  Instagrampartealta(),
         '/ejercicio_9': (context) => const JuegoAleatorioScreen(),
-      },
+      }, */
     );
   }
 }

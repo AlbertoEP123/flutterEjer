@@ -35,7 +35,7 @@ class MenuLateral extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushNamed('/ejercicio2');
+                Navigator.of(context).pushNamed('/ejercicio_2');
               },
             ),
           ),
@@ -43,35 +43,35 @@ class MenuLateral extends StatelessWidget {
             title: const Text("3. Fotos en columna"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/ejercicio3');
+              Navigator.of(context).pushNamed('/ejercicio_3');
             },
           ),
           ListTile(
             title: const Text("4. Iconos"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/ejercicio4');
+              Navigator.of(context).pushNamed('/ejercicio_4');
             },
           ),
           ListTile(
             title: const Text("5. Ejercicio resuelto"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/ejercicio5');
+              Navigator.of(context).pushNamed('/ejercicio_5');
             },
           ),
           ListTile(
             title: const Text("6. Ejercicio teléfonos"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/ejercicio6');
+              Navigator.of(context).pushNamed('/ejercicio_6');
             },
           ),
           ListTile(
             title: const Text("7. Filas y columnas anidadas"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/ejercicio7');
+              Navigator.of(context).pushNamed('/ejercicio_7');
             },
           ),
           ListTile(
@@ -85,7 +85,7 @@ class MenuLateral extends StatelessWidget {
             title: const Text("9. Imagenes Aleatorias"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/ejercicio9');
+              Navigator.of(context).pushNamed('/ejercicio_9');
             },
           ),
         ],
