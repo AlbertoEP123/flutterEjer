@@ -39,9 +39,7 @@ class MyApp extends StatelessWidget {
       title: 'Drawer',
       initialRoute: AppRoutes.home,  // Ruta principal desde approutes
       routes: AppRoutes.routes,
-      onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (context) => const HomeScreen());  // En caso de que la ruta no exista
-      },
+     
       //ESTO ERA LAS RUTAS NOMBRADAS, QUE YA NO LA USO POR USAR LAS RUTAS EXTERNAS DE ARRIBA
       // LO DEJO COMENTADO PARA QUE SE VEA QUE ESTABA HECHO DE LA RELACION 3
       /* initialRoute: '/',

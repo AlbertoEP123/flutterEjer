@@ -42,19 +42,20 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
       if (_imagenVisible) {
         setState(() {
           _imagenVisible = false;
-          _puntos -= 2; 
+          _puntos -= 2;
         });
+        _mostrarSnackBar('-2 Puntos');
       }
     });
   }
 
- 
   void _iniciarTemporizador() {
     _temporizador = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (_puntos > 0) {
         _mostrarImagenAleatoria(); // Si el puntaje es mayor que 0, seguir mostrando imágenes
       } else {
         _temporizador.cancel(); // Detengo el temporizador cuando los puntos sean 0
+        _mostrarFinDeJuegoDialog();
       }
     });
   }
@@ -63,16 +64,54 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   void _presionarImagen() {
     if (_imagenVisible) {
       setState(() {
-        _puntos += 1; // Sumar 1 punto si es pulsado
+        _puntos += 1; // Sumar 1 punto si es pulsados
         _imagenVisible = false; // Esconde la imagen al presionar
       });
+      _mostrarSnackBar('+1 Punto');
     }
+  }
+
+  // Metodo SnackBar 
+  void _mostrarSnackBar(String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(mensaje),
+       duration: const Duration(seconds: 1))
+       );
+    
+  }
+
+  // Mostrar un AlertDialog cuando el juego termina
+  void _mostrarFinDeJuegoDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Game over :('),
+          content: Text('Perdiste con: $_puntos puntos'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Reiniciar'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el dialog
+                _iniciarJuego(); // Reiniciar el juego
+              },
+            ),
+            TextButton(
+              child: const Text('Salir'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el dialog
+                
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
@@ -89,7 +128,6 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
       drawer: const MenuLateral(),
       body: Stack(
         children: [
-         
           if (_imagenVisible) // si es visible
             Positioned(
               top: _posY,
@@ -107,10 +145,9 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
           ),
         ],
       ),
-      
       floatingActionButton: FloatingActionButton(
         onPressed: _iniciarJuego, // Llama a _iniciarJuego cuando se presiona
-        child: const Icon(Icons.play_arrow), 
+        child: const Icon(Icons.play_arrow),
       ),
     );
   }
