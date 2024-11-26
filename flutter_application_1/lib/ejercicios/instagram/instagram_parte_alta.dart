@@ -9,6 +9,10 @@ class Instagrampartealta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtengo el tamaño de la pantalla, para evitar el overflow
+    final anchura = MediaQuery.of(context).size.width;
+    final altura = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Instagram"), 
@@ -17,9 +21,12 @@ class Instagrampartealta extends StatelessWidget {
 
       body: Column(
         children: [
-          // Container nombre usuario
+          // Container perfil
           Container(
-            padding: const EdgeInsets.only(top: 20.0, left: 20.0),
+            padding: EdgeInsets.only(
+              top: altura * 0.02,  
+              left: anchura * 0.05,  
+            ),
             color: const Color.fromARGB(255, 255, 255, 255),
             child: const Row(
               children: [
@@ -27,81 +34,82 @@ class Instagrampartealta extends StatelessWidget {
                   "alvarezdelvayo",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                    fontSize: 14,  
                   ),
                 ),
               ],
             ),
           ),
-          // Container avatar, publicaciones y biografía 
+
+          // Container del avatar y demas
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.symmetric(
+              horizontal: anchura * 0.03,  // Ajuste de padding horizontal
+              vertical: altura * 0.02,  // y vertical
+            ),
             color: const Color.fromARGB(255, 255, 255, 255),
             child: Column(
               children: [
-                // avatar
+                
                 Row(
                   children: [
                     const CircleAvatar(
                       radius: 40,
-                      backgroundImage: AssetImage('assets/avatar.webp'), 
+                      backgroundImage: AssetImage('assets/avatar.webp'),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
+                    SizedBox(width: anchura * 0.05),  
+                    Flexible( 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text(
-                                '1026\nPublicaciones',
-                                style: TextStyle(fontSize: 12),
+                              Flexible(  // Esto también hace que los textos no se desborden
+                                child: Text(
+                                  '1026\nPublicaciones',
+                                  style: TextStyle(fontSize: anchura * 0.03),
+                                  overflow: TextOverflow.ellipsis, 
+                                ),
                               ),
-                              SizedBox(width: 1),
-                              Text(
-                                '859\nSeguidores',
-                                style: TextStyle(fontSize: 12),
+                              Flexible(
+                                child: Text(
+                                  '859\nSeguidores',
+                                  style: TextStyle(fontSize: anchura * 0.03),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              SizedBox(width: 1),
-                              Text(
-                                '211\nSeguidos',
-                                style: TextStyle(fontSize: 12),
+                              Flexible(
+                                child: Text(
+                                  '211\nSeguidos',
+                                  style: TextStyle(fontSize: anchura * 0.03),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          // Editar perfil
+                          SizedBox(height: altura * 0.02),
                           Padding(
-                            padding: const EdgeInsets.only(left: 10, bottom: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 148, 148, 148),
-                                      ),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    width: 260,
-                                    height: 28,
-                                    alignment: Alignment.center,
-                                    child: const Text(
-                                      'Editar perfil',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
+                            padding: EdgeInsets.only(left: anchura * 0.02),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: anchura * 0.05,
+                                vertical: altura * 0.01,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromARGB(255, 148, 148, 148),
                                 ),
-                              ],
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              alignment: Alignment.center,
+                              child: const Text(
+                                'Editar perfil',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -109,8 +117,8 @@ class Instagrampartealta extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                // biografía 
+                SizedBox(height: altura * 0.02), 
+                // Biografía
                 const Text(
                   "Fernando Álvarez del Vayo\n\nNunca sabes lo que te depara el futuro",
                   style: TextStyle(fontSize: 14),
@@ -118,8 +126,12 @@ class Instagrampartealta extends StatelessWidget {
                 ),
               ],
             ),
-          ), // Container clase destacadas
-          Expanded(child: InstagramDestacadas()),  // Aquí va el widget de InstagramDestacadas
+          ),
+
+         
+          Expanded(
+            child: InstagramDestacadas(),  
+          ),
         ],
       ),
     );

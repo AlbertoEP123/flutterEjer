@@ -11,7 +11,6 @@ class Ejercicio7 extends StatelessWidget {
         title: const Text("Ejercicio 7. Filas y columnas anidadas"),
       ),
       drawer: MenuLateral(),
-
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -26,12 +25,15 @@ class Ejercicio7 extends StatelessWidget {
                     height: 100,
                     child: Image.asset("assets/tlf.webp", fit: BoxFit.cover),
                   ),
+                  Text("telefono"),
+
                   const SizedBox(height: 50), // Espacio entre imágenes
                   SizedBox(
                     width: 100,
                     height: 100,
                     child: Image.asset("assets/mens.webp", fit: BoxFit.cover),
                   ),
+                  Text("mensajeria"),
                 ],
               ),
               const SizedBox(width: 50), // Espacio entre columnas
@@ -42,18 +44,19 @@ class Ejercicio7 extends StatelessWidget {
                     height: 100,
                     child: Image.asset("assets/ig.webp", fit: BoxFit.cover),
                   ),
-                  const SizedBox(height: 50), 
+                  Text("instagram"),
+                  const SizedBox(height: 50),
                   SizedBox(
                     width: 100,
                     height: 100,
                     child: Image.asset("assets/was.webp", fit: BoxFit.cover),
                   ),
+                  Text("whatsapp"),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 50), 
-        
+          const SizedBox(height: 50),
         ],
       ),
     );

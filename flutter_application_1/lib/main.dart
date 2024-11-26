@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         '/ejercicio5': (context) => const Ejercicio5(),
         '/ejercicio6': (context) => const Ejercicio6(),
         '/ejercicio7': (context) => const Ejercicio7(),
-        '/instagram': (context) => const Instagrampartealta(),
+        '/instagram': (context) =>  Instagrampartealta(),
         '/ejercicio9': (context) => const JuegoAleatorioScreen(),
       },
     );
