@@ -38,14 +38,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/ejercicio2': (context) => const Ejercicio2(),
-        '/ejercicio3': (context) => const Ejercicio3(),
-        '/ejercicio4': (context) => const Ejercicio4(),
-        '/ejercicio5': (context) => const Ejercicio5(),
-        '/ejercicio6': (context) => const Ejercicio6(),
-        '/ejercicio7': (context) => const Ejercicio7(),
+        '/ejercicio_2': (context) => const Ejercicio2(),
+        '/ejercicio_3': (context) => const Ejercicio3(),
+        '/ejercicio_4': (context) => const Ejercicio4(),
+        '/ejercicio_5': (context) => const Ejercicio5(),
+        '/ejercicio_6': (context) => const Ejercicio6(),
+        '/ejercicio_7': (context) => const Ejercicio7(),
         '/instagram': (context) =>  Instagrampartealta(),
-        '/ejercicio9': (context) => const JuegoAleatorioScreen(),
+        '/ejercicio_9': (context) => const JuegoAleatorioScreen(),
       },
     );
   }
