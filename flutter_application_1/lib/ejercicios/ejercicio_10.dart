@@ -13,45 +13,48 @@ class Juego7y30 extends State<Ejercicio10> {
   List<int> baraja = [1, 2, 3, 4, 5, 6, 7, 11, 12, 13];
   int turno = 0;
   late int random;
-  late int randomUser1 = 0;
-  late int randomUser2 = 0;
-  late int suma1 = 0;
-  late int suma2 = 0;
+  late int maquina = 0;
+  late int usuario = 0;
+  late int sumaMaquina = 0;
+  late int sumaUsuario = 0;
 
   // Function que da carta random a los usuarios
   void darRandom1() {
     random = Random().nextInt(baraja.length);
-    randomUser1 = baraja[random];
-    print('User 1 card: $randomUser1');
-    suma1 = randomUser1;
+    maquina = baraja[random];
+    print('Maquina card: $maquina');
+    sumaMaquina = maquina;
   }
 
   void darRandom2() {
     random = Random().nextInt(baraja.length);
-    randomUser2 = baraja[random];
-    print('User 2 card: $randomUser2');
-    suma2 = randomUser2;
+    usuario = baraja[random];
+    print('Usuario card: $usuario');
+    sumaUsuario = usuario;
+  }
+
+  void seguir(){
+
   }
 
   // void darRandom2SiQuiere() {
   //   random = Random().nextInt(baraja.length);
-  //   randomUser2 = baraja[random];
+  //   usuario = baraja[random];
   // }
 
   void _iniciarJuego() {
     setState(() {
-      while (randomUser1 < 7 || randomUser2 < 7) {
+      while (maquina < 7 || usuario < 7) {
         darRandom1();
         darRandom2();
         turno++;
-        
       }
-      if (suma1 == 7) {
-          print("randomUser1 gano");
-        }
-        if (suma2 == 7) {
-          print("randomUser2 gano");
-        }
+      if (sumaMaquina == 7) {
+        print("maquina gano");
+      }
+      if (sumaUsuario == 7) {
+        print("usuario gano");
+      }
       print("juego acabado");
     });
   }
@@ -70,8 +73,8 @@ class Juego7y30 extends State<Ejercicio10> {
             Text('Turno: $turno',
                 style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 20),
-            Text('Tu carta es: $randomUser2'),
-            Text("Quieres otra?"),
+            Text('Tu carta es: $usuario'),
+            Text('Carta maquina :  $maquina'),
             // ElevatedButton(
             //     onPressed: darRandom2SiQuiere,
             //     child: const Text("quiero otra")),
@@ -79,6 +82,10 @@ class Juego7y30 extends State<Ejercicio10> {
             ElevatedButton(
               onPressed: _iniciarJuego,
               child: const Text('Iniciar Juego'),
+            ),
+            ElevatedButton(onPressed: seguir, 
+            child: const Text('Seguir'),
+            
             ),
           ],
         ),
