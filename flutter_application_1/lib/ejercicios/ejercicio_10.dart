@@ -33,14 +33,14 @@ class Juego7y30 extends State<Ejercicio10> {
     sumaUsuario = usuario;
   }
 
-  void seguir(){
-
-  }
+  
 
   // void darRandom2SiQuiere() {
   //   random = Random().nextInt(baraja.length);
   //   usuario = baraja[random];
   // }
+
+
 
   void _iniciarJuego() {
     setState(() {
@@ -48,6 +48,8 @@ class Juego7y30 extends State<Ejercicio10> {
         darRandom1();
         darRandom2();
         turno++;
+        break;
+        
       }
       if (sumaMaquina == 7) {
         print("maquina gano");
@@ -84,10 +86,7 @@ class Juego7y30 extends State<Ejercicio10> {
               child: const Text('Iniciar Juego'),
             ),
             SizedBox(height: 25,),
-            ElevatedButton(onPressed: seguir, 
-            child: const Text('Seguir'),
             
-            ),
           ],
         ),
       ),
