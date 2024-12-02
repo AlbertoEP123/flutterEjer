@@ -17,11 +17,13 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   final Random _aleatorio = Random();
   late Timer _temporizador;
   late Timer _imagenTimer;
+  bool _juegoActivo = false; 
 
   // Función que inicia el juego
   void _iniciarJuego() {
     setState(() {
       _puntos = 10;
+      _juegoActivo = true;
     });
     _mostrarImagenAleatoria();
     _iniciarTemporizador();
@@ -39,10 +41,15 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
 
     // Eliminar la imagen después de un tiempo
     _imagenTimer = Timer(const Duration(seconds: 1), () {
-      if (_imagenVisible) {
+      if (mounted && _imagenVisible) { // Verifica que el widget aún está montado
         setState(() {
           _imagenVisible = false;
-          _puntos -= 2;
+          
+          if (_puntos > 2) {
+            _puntos -= 2;
+          } else {
+            _puntos = 0;  
+          }
         });
         _mostrarSnackBar('-2 Puntos');
       }
@@ -51,37 +58,42 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
 
   void _iniciarTemporizador() {
     _temporizador = Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (_puntos > 0) {
+      if (mounted && _puntos > 0) {
         _mostrarImagenAleatoria(); // Si el puntaje es mayor que 0, seguir mostrando imágenes
       } else {
         _temporizador.cancel(); // Detengo el temporizador cuando los puntos sean 0
-        _mostrarFinDeJuegoDialog();
+        if (mounted) {
+          _mostrarFinDeJuegoDialog();
+        }
       }
     });
   }
 
-  // evento de presionar la imagen
+  // Evento de presionar la imagen
   void _presionarImagen() {
     if (_imagenVisible) {
       setState(() {
-        _puntos += 1; // Sumar 1 punto si es pulsados
+        _puntos += 1; // Sumar 1 punto si es pulsado
         _imagenVisible = false; // Esconde la imagen al presionar
       });
       _mostrarSnackBar('+1 Punto');
     }
   }
 
-  // Metodo SnackBar 
+  // Metodo SnackBar
   void _mostrarSnackBar(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(mensaje),
-       duration: const Duration(seconds: 1))
-       );
-    
+      duration: const Duration(seconds: 1),
+    ));
   }
 
   // Mostrar un AlertDialog cuando el juego termina
   void _mostrarFinDeJuegoDialog() {
+    setState(() {
+      _juegoActivo = false; // Cambiar el estado del juego a inactivo cuando termina
+    });
+    
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -92,15 +104,15 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
             TextButton(
               child: const Text('Reiniciar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el dialog
-                _iniciarJuego(); // Reiniciar el juego
+                Navigator.of(context).pop(); 
+                _iniciarJuego(); 
               },
             ),
             TextButton(
               child: const Text('Salir'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el dialog
-                
+                Navigator.of(context).pop(); 
+                dispose(); 
               },
             ),
           ],
@@ -128,7 +140,7 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
       drawer: const MenuLateral(),
       body: Stack(
         children: [
-          if (_imagenVisible) // si es visible
+          if (_imagenVisible && _juegoActivo) // Si el juego está activo y la imagen es visible
             Positioned(
               top: _posY,
               left: _posX,
