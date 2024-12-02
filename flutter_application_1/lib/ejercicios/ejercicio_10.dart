@@ -10,7 +10,7 @@ class Ejercicio10 extends StatefulWidget {
 }
 
 class Juego7y30 extends State<Ejercicio10> {
-  List<int> baraja = [1, 2, 3, 4, 5, 6, 7, 11, 12, 13];
+  List<int> baraja = [1, 2, 3, 4, 5, 6, 7];
   int turno = 0;
   late int random;
   late int maquina = 0;
@@ -83,6 +83,7 @@ class Juego7y30 extends State<Ejercicio10> {
               onPressed: _iniciarJuego,
               child: const Text('Iniciar Juego'),
             ),
+            SizedBox(height: 25,),
             ElevatedButton(onPressed: seguir, 
             child: const Text('Seguir'),
             

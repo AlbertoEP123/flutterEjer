@@ -157,10 +157,12 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
           ),
         ],
       ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: _iniciarJuego, // Llama a _iniciarJuego cuando se presiona
         child: const Icon(Icons.play_arrow),
       ),
+      
     );
   }
 }
