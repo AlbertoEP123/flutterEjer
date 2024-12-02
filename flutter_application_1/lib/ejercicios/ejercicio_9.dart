@@ -17,45 +17,45 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
   final Random _aleatorio = Random();
   late Timer _temporizador;
   late Timer _imagenTimer;
-  bool _juegoActivo = false; 
+  bool _juegoActivo = false;
 
   // Función que inicia el juego
   void _iniciarJuego() {
-    setState(() {
-      _puntos = 10;
-      _juegoActivo = true;
-    });
-    _mostrarImagenAleatoria();
-    _iniciarTemporizador();
+    if (mounted) {
+      setState(() {
+        _puntos = 10;
+        _juegoActivo = true;
+      });
+      _mostrarImagenAleatoria();
+      _iniciarTemporizador();
+    }
   }
 
   // Función que muestra una imagen en una posición aleatoria
   void _mostrarImagenAleatoria() {
     if (_imagenVisible) return; // Evita que se muestre dos veces seguidas
 
-    setState(() {
-      _imagenVisible = true;
-      _posX = _aleatorio.nextDouble() * 200;
-      _posY = _aleatorio.nextDouble() * 600;
-    });
+    if (mounted) {
+      setState(() {
+        _imagenVisible = true;
+        _posX = _aleatorio.nextDouble() * 200;
+        _posY = _aleatorio.nextDouble() * 600;
+      });
 
-    // Eliminar la imagen después de un tiempo
-    _imagenTimer = Timer(const Duration(seconds: 1), () {
-      if (mounted && _imagenVisible) { // Verifica que el widget aún está montado
-        setState(() {
-          _imagenVisible = false;
-          
-          if (_puntos > 2) {
-            _puntos -= 2;
-          } else {
-            _puntos = 0;  
-          }
-        });
-        _mostrarSnackBar('-2 Puntos');
-      }
-    });
+      // Eliminar la imagen después de un tiempo
+      _imagenTimer = Timer(const Duration(seconds: 1), () {
+        if (mounted && _imagenVisible) { // Verifica que el widget aún está montado
+          setState(() {
+            _imagenVisible = false;
+            _puntos = _puntos > 2 ? _puntos - 2 : 0;  
+          });
+          _mostrarSnackBar('-2 Puntos');
+        }
+      });
+    }
   }
 
+  // Temporizador que sigue mostrando imágenes hasta que se acaben los puntos
   void _iniciarTemporizador() {
     _temporizador = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (mounted && _puntos > 0) {
@@ -69,56 +69,49 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
     });
   }
 
-  // Evento de presionar la imagen
-  void _presionarImagen() {
-    if (_imagenVisible) {
-      setState(() {
-        _puntos += 1; // Sumar 1 punto si es pulsado
-        _imagenVisible = false; // Esconde la imagen al presionar
-      });
-      _mostrarSnackBar('+1 Punto');
+  // Muestro un AlertDialog cuando el juego termina
+  void _mostrarFinDeJuegoDialog() {
+    setState(() {
+      _juegoActivo = false; // Cambio el estado del juego a inactivo cuando termina
+    });
+
+    if (mounted) { // Aseguro que el widget sigue montado
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Game over :('),
+            content: Text('Perdiste con: $_puntos puntos'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Reiniciar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _iniciarJuego(); 
+                },
+              ),
+              TextButton(
+                child: const Text('Salir'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Detener los temporizadores 
+                  _temporizador.cancel();
+                  _imagenTimer.cancel();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
-  // Metodo SnackBar
+  // Mostrar SnackBar
   void _mostrarSnackBar(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(mensaje),
       duration: const Duration(seconds: 1),
     ));
-  }
-
-  // Mostrar un AlertDialog cuando el juego termina
-  void _mostrarFinDeJuegoDialog() {
-    setState(() {
-      _juegoActivo = false; // Cambiar el estado del juego a inactivo cuando termina
-    });
-    
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Game over :('),
-          content: Text('Perdiste con: $_puntos puntos'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Reiniciar'),
-              onPressed: () {
-                Navigator.of(context).pop(); 
-                _iniciarJuego(); 
-              },
-            ),
-            TextButton(
-              child: const Text('Salir'),
-              onPressed: () {
-                Navigator.of(context).pop(); 
-                dispose(); 
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -128,6 +121,7 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
 
   @override
   void dispose() {
+    // Cancelo temporizadores para evitar errores
     _temporizador.cancel();
     _imagenTimer.cancel();
     super.dispose();
@@ -145,11 +139,19 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
               top: _posY,
               left: _posX,
               child: GestureDetector(
-                onTap: _presionarImagen,
-                child: Image.asset('assets/image.png', width: 100, height: 100), // lo muestro
+                onTap: () {
+                  if (_imagenVisible) {
+                    setState(() {
+                      _puntos += 1; 
+                      _imagenVisible = false; 
+                    });
+                    _mostrarSnackBar('+1 Punto');
+                  }
+                },
+                child: Image.asset('assets/image.png', width: 100, height: 100), // Lo muestro
               ),
             ),
-          // Mostrar puntos 
+          // Mostrar puntos
           Positioned(
             top: 50,
             left: 20,
@@ -157,12 +159,10 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
           ),
         ],
       ),
-      
       floatingActionButton: FloatingActionButton(
-        onPressed: _iniciarJuego, // Llama a _iniciarJuego cuando se presiona
+        onPressed: _iniciarJuego, 
         child: const Icon(Icons.play_arrow),
       ),
-      
     );
   }
 }

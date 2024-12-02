@@ -89,7 +89,7 @@ class MenuLateral extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text("10. Siete y media"),
+            title: const Text("10. Siete y medio"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed('/ejercicio_10');
