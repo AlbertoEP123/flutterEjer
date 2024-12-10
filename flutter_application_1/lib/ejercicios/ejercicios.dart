@@ -9,3 +9,4 @@ export 'ejercicio_7.dart';
 export './instagram/instagram_parte_alta.dart';
 export 'ejercicio_9.dart';
 export 'ejercicio_10.dart';
+export 'ejercicio_11.dart';

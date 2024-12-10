@@ -95,6 +95,13 @@ class MenuLateral extends StatelessWidget {
               Navigator.of(context).pushNamed('/ejercicio_10');
             },
           ),
+            ListTile(
+            title: const Text("11.Formularios"),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed('/ejercicio_11');
+            },
+          ),
         ],
       ),
     );

@@ -16,6 +16,8 @@ class AppRoutes {
   static const String instagram = '/instagram';
   static const String ejercicio9 = '/ejercicio_9';
   static const String ejercicio10 = '/ejercicio_10';
+  static const String ejercicio11 = '/ejercicio_11';
+
 
 
   // Mapa de rutas
@@ -30,6 +32,8 @@ class AppRoutes {
     instagram: (context) => const Instagrampartealta(),
     ejercicio9: (context) => const JuegoAleatorioScreen(),
     ejercicio10: (context) => const Ejercicio10(),
+    ejercicio11: (context) => const Ejercicio11(),
+
 
   };
 }
