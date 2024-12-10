@@ -96,7 +96,7 @@ class MenuLateral extends StatelessWidget {
             },
           ),
             ListTile(
-            title: const Text("11.Formularios"),
+            title: const Text("11. Formularios"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed('/ejercicio_11');

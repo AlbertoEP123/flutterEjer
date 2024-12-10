@@ -16,7 +16,7 @@ class AppRoutes {
   static const String instagram = '/instagram';
   static const String ejercicio9 = '/ejercicio_9';
   static const String ejercicio10 = '/ejercicio_10';
-  static const String ejercicio11 = '/ejercicio_11';
+    static const String ejercicio11 = '/ejercicio_11';
 
 
 
