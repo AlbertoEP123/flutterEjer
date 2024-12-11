@@ -16,7 +16,9 @@ class AppRoutes {
   static const String instagram = '/instagram';
   static const String ejercicio9 = '/ejercicio_9';
   static const String ejercicio10 = '/ejercicio_10';
-    static const String ejercicio11 = '/ejercicio_11';
+  static const String ejercicio11 = '/ejercicio_11';
+  static const String ejercicio12 = '/ejercicio_12';
+
 
 
 
@@ -33,6 +35,8 @@ class AppRoutes {
     ejercicio9: (context) => const JuegoAleatorioScreen(),
     ejercicio10: (context) => const Ejercicio10(),
     ejercicio11: (context) => const Ejercicio11(),
+      ejercicio12: (context) => const Ejercicio12(),
+
 
 
   };
