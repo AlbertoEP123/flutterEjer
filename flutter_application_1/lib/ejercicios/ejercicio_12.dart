@@ -20,7 +20,7 @@ class _FormularioStateSwitch extends State<Ejercicio12> {
   // Variables para la ciudad y el sexo
   String? _ciudadSeleccionada;
   String? _sexoSeleccionado;
-  List<String> _aficionesSeleccionadas = [];
+  final List<String> _aficionesSeleccionadas = [];
 
   // Lista de ciudades de Andalucía
   final List<String> _ciudadesAndalucia = [
