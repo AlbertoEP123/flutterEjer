@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_flutter_vuelos/pantallas/pantallaCarga.dart';
+import 'package:proyecto_flutter_vuelos/pantallas/pantalla_carga.dart';
 
 void main() {
   runApp(const MyApp());
