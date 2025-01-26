@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_flutter_vuelos/pantallas/drawerInicio.dart';
 
 class Pantallavuelosguardados extends StatelessWidget {
   const Pantallavuelosguardados({super.key});
@@ -10,7 +9,6 @@ class Pantallavuelosguardados extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Vuelos guardados"),
       ),
-      drawer: const Drawerinicio(),  
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

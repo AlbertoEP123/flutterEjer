@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_flutter_vuelos/pantallas/drawerInicio.dart';
 
 class Pantallaconfiguracion extends StatelessWidget {
   const Pantallaconfiguracion({super.key});
@@ -10,7 +9,6 @@ class Pantallaconfiguracion extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Configuracion"),
       ),
-      drawer: const Drawerinicio(),  
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

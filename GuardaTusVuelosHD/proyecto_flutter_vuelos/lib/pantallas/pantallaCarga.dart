@@ -18,11 +18,14 @@ class PantallaCarga extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(height: 20),
-            Text("GuardaTusVuelosHD"),
-            Text("Cargando..."),            
+          children: <Widget>[
+            const CircularProgressIndicator(),
+            const SizedBox(height: 20),
+            Image.asset("assets/logo.png",height: 100,width: 100,),           
+
+            const Text("GuardaTusVuelosHD"),
+            const Text("Cargando..."), 
+            SizedBox(height: 50),
           ],
         ),
       ),
