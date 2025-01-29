@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:proyecto_flutter_vuelos/api/api_app.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:csv/csv.dart';
 
 class Pantallabusqueda extends StatefulWidget {
   const Pantallabusqueda({super.key});
@@ -9,25 +12,69 @@ class Pantallabusqueda extends StatefulWidget {
 }
 
 class PantallabusquedaState extends State<Pantallabusqueda> {
+  late Future<List<Flight>> resultados;
+  Map<String, String> airportData = {};
+  @override
+  void initState() {
+    super.initState();
+    _loadCsvData().then((data) {
+      setState(() {
+        airportData = data;
+      });
+    });
+    resultados = Future.value([]); 
+  }
+
+ Future<Map<String, String>> _loadCsvData() async {
+
+
+  // Cargar el archivo CSV como texto
+  final rawData = await rootBundle.loadString('assets/airports.csv');
+
+  
+  
+  List<List<dynamic>> listData = const CsvToListConverter(eol: '\n').convert(rawData);
+
+  print("Número de filas: ${listData.length}");
+
+  Map<String, String> data = {};
+  for (int i = 1; i < listData.length; i++) {
+    // Asegurarse de que cada fila tenga suficientes columnas
+    if (listData[i].length > 13) {
+
+      // Intentar obtener los valores de las columnas 10 y 13
+      String key = listData[i][10]?.toString() ?? 'Clave no disponible';
+      if(key.isEmpty){
+        continue;
+      }
+      String value = listData[i][13]?.toString() ?? 'Valor no disponible';
+      if(value.isEmpty){
+        continue;
+      }
+   
+      // Agregar los valores al mapa
+      data[key] = value;
+    } else {
+      print("Fila $i tiene menos de 14 columnas.");
+    }
+  }
+
+  print("5");
+  return data;
+}
+
+
   DateTime fechaSalida = DateTime.now();
   DateTime? fechaVuelta;
   int numeroPersonas = 1;
   bool soloIda = false;
-  String origen = '';
-  String destino = '';
 
-  // Controladores de texto
+
   TextEditingController controladorOrigen = TextEditingController();
   TextEditingController controladorDestino = TextEditingController();
 
-  
-  String resultados = "";
-
-  // Instancia de la API
-  ApiAPP skyscannerAPI = ApiAPP();
-
-  // Función para seleccionar la fecha
-  Future<void> _seleccionarFecha(BuildContext context, bool esFechaSalida) async {
+  Future<void> _seleccionarFecha(
+      BuildContext context, bool esFechaSalida) async {
     final DateTime? fechaSeleccionada = await showDatePicker(
       context: context,
       initialDate: esFechaSalida ? fechaSalida : DateTime.now(),
@@ -46,19 +93,68 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     }
   }
 
-  // Función de búsqueda
-  void _buscarVuelos() {
-    setState(() {
-      origen = controladorOrigen.text;
-      destino = controladorDestino.text;
-      
-      resultados = 'Buscando vuelos...\n'
-          'Origen: $origen\n'
-          'Destino: $destino\n'
-          'Fecha de salida: ${fechaSalida.toLocal()}\n'
-          'Fecha de vuelta: ${fechaVuelta?.toLocal() ?? 'No seleccionada'}\n'
-          'Número de personas: $numeroPersonas';
-    });
+  void _buscarVuelos() async {
+    try {
+      setState(() {
+      });
+
+      // Obtener los códigos IATA de las ciudades de origen y destino
+      // String ciudadOrigen = airportData[controladorOrigen.text]!;
+      // String ciudadDestino = airportData[controladorDestino.text]!;
+      // print(ciudadDestino);
+      // print(ciudadOrigen);
+      // Pasar los códigos IATA a la función para obtener los vuelos
+      setState(() {
+        resultados = fetchAlbum(controladorOrigen.text, controladorDestino.text);
+      });
+    } catch (e) {
+      // Si hay un error (por ejemplo, ciudad no encontrada), mostrar un mensaje al usuario
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  Future<String> _obtenerIATA(String ciudad) async {
+    try {
+      // Normalizamos la entrada (por ejemplo, ignorar mayúsculas/minúsculas)
+      ciudad = ciudad.trim().toLowerCase();
+
+      // Buscamos la ciudad en los datos del CSV
+      if (!airportData.containsKey(ciudad)) {
+        throw Exception('Ciudad no encontrada');
+      }
+      var iataCode = airportData[ciudad]!;
+
+      // Verificamos que el código IATA no esté vacío
+    
+      if (iataCode.isEmpty) {
+        throw Exception('Código IATA no disponible para $ciudad');
+      }
+
+      return iataCode;
+    } catch (e) {
+      throw Exception('Error al obtener IATA para $ciudad: $e');
+    }
+  }
+
+  Future<List<Flight>> fetchAlbum(
+      String ciudadOrigen, String ciudadDestino) async {
+    String url =
+        "https://api.aviationstack.com/v1/flights?access_key=4af3d655ae1acbb6ec43c81b9a55d260&dep_iata=$ciudadOrigen&arr_iata=$ciudadDestino";
+print(url);
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body)['data'] as List;
+            print(response.body);
+    
+      List<Flight> vuelos = data.map((json) => Flight.fromJson(json)).toList();
+      print(vuelos);
+      return vuelos;
+    } else {
+      throw Exception('Failed to load flights');
+    }
   }
 
   @override
@@ -209,24 +305,59 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                 ),
 
                 const SizedBox(height: 20),
-
-                // Mostrar resultados
-                if (resultados.isNotEmpty)
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    color: const Color.fromARGB(255, 165, 196, 226),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(resultados, style: const TextStyle(fontSize: 18)),
-                      ],
-                    ),
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  color: const Color.fromARGB(255, 165, 196, 226),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FutureBuilder<List<Flight>>(
+                        future: resultados,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else if (snapshot.hasData) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: snapshot.data!.map((flight) {
+                                return Text(
+                                  'Origen: ${flight.aeropuertoOrigen}, Destino: ${flight.aeropuertoDestino}',
+                                );
+                              }).toList(),
+                            );
+                          } else {
+                            return const Text('No se encontraron vuelos.');
+                          }
+                        },
+                      )
+                    ],
                   ),
+                ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class Flight {
+  final String? aeropuertoOrigen;
+  final String? aeropuertoDestino;
+
+  const Flight({
+    this.aeropuertoOrigen,
+    this.aeropuertoDestino,
+  });
+
+  factory Flight.fromJson(Map<String, dynamic> json) {
+    return Flight(
+      aeropuertoOrigen: json['departure']['airport'],
+      aeropuertoDestino: json['arrival']['airport'],
     );
   }
 }
