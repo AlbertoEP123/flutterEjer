@@ -5,11 +5,16 @@ import 'package:proyecto_flutter_vuelos/model/flight.dart';
 class ApiApp {
 
 static Future<List<Flight>> fetchFlights(
-      String ciudadOrigen, String ciudadDestino, DateTime fechaSalida, DateTime fechaVuelta) async {
+      String ciudadOrigen, String ciudadDestino, DateTime fechaSalida, DateTime fechaVuelta, int tipo, int nPasajeros) async {
+  String url ;
+    if(tipo==1){
+      url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&return_date=${fechaVuelta.toString().substring(0,10)}&type=$tipo&currency=EUR&hl=en&adults=$nPasajeros&api_key=132a005a4547169592f9c61e7006cf60a772f8cb5a69b2920d12ddefe6b07054";
+    }else{
+      url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&type=$tipo&hl=en&currency=EUR&adults=$nPasajeros&api_key=132a005a4547169592f9c61e7006cf60a772f8cb5a69b2920d12ddefe6b07054";
+    }
     //String url =
       //  "https://api.aviationstack.com/v1/flights?access_key=f2a5651bb06942d6d5c5de3826f27b18&dep_iata=$ciudadOrigen&arr_iata=$ciudadDestino";
-  String url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&return_date=${fechaVuelta.toString().substring(0,10)}&hl=en&api_key=132a005a4547169592f9c61e7006cf60a772f8cb5a69b2920d12ddefe6b07054";
-    
+    print(url);
     try {
       final response = await http.get(Uri.parse(url));
 

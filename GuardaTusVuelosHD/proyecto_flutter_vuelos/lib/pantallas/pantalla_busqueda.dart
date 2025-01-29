@@ -46,7 +46,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   // }
 
   DateTime fechaSalida = DateTime.now();
-  DateTime? fechaVuelta;
+  DateTime fechaVuelta = DateTime.now();
   int numeroPersonas = 1;
   bool soloIda = false;
 
@@ -76,7 +76,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     try {
       setState(() {
         resultados =
-           ApiApp.fetchFlights(controladorOrigen.text, controladorDestino.text, fechaSalida, fechaVuelta!);
+           ApiApp.fetchFlights(controladorOrigen.text, controladorDestino.text, fechaSalida, fechaVuelta!,soloIda ? 2:1,numeroPersonas);
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -193,9 +193,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                       onChanged: (bool nuevoValor) {
                         setState(() {
                           soloIda = nuevoValor;
-                          if (!soloIda) {
-                            fechaVuelta = null;
-                          }
+                        
                           
                         });
                       },
@@ -297,6 +295,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                                       });
                                     },
                                   ),
+                                  Text("Precio: ${flight.precio} €"),
                                 ],
                               ),
                               trailing: Icon(Icons.arrow_forward_ios,
