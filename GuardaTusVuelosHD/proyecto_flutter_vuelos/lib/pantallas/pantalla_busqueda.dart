@@ -59,7 +59,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     }
   }
 
-  print("5");
   return data;
 }
 
@@ -117,16 +116,13 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
 
   Future<String> _obtenerIATA(String ciudad) async {
     try {
-      // Normalizamos la entrada (por ejemplo, ignorar mayúsculas/minúsculas)
       ciudad = ciudad.trim().toLowerCase();
 
-      // Buscamos la ciudad en los datos del CSV
       if (!airportData.containsKey(ciudad)) {
         throw Exception('Ciudad no encontrada');
       }
       var iataCode = airportData[ciudad]!;
 
-      // Verificamos que el código IATA no esté vacío
     
       if (iataCode.isEmpty) {
         throw Exception('Código IATA no disponible para $ciudad');
@@ -142,7 +138,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       String ciudadOrigen, String ciudadDestino) async {
     String url =
         "https://api.aviationstack.com/v1/flights?access_key=4af3d655ae1acbb6ec43c81b9a55d260&dep_iata=$ciudadOrigen&arr_iata=$ciudadDestino";
-print(url);
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -150,7 +145,6 @@ print(url);
             print(response.body);
     
       List<Flight> vuelos = data.map((json) => Flight.fromJson(json)).toList();
-      print(vuelos);
       return vuelos;
     } else {
       throw Exception('Failed to load flights');
@@ -282,7 +276,7 @@ print(url);
                             numeroPersonas = nuevoValor!;
                           });
                         },
-                        items: List.generate(10, (index) => index + 1)
+                        items: List.generate(8, (index) => index + 1)
                             .map<DropdownMenuItem<int>>((int valor) {
                           return DropdownMenuItem<int>(
                             value: valor,
@@ -297,7 +291,7 @@ print(url);
                     ElevatedButton(
                       onPressed: _buscarVuelos,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[600],
+                        backgroundColor: const Color.fromARGB(127, 30, 206, 229),
                       ),
                       child: const Text('Buscar'),
                     ),
@@ -312,6 +306,7 @@ print(url);
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FutureBuilder<List<Flight>>(
+                        
                         future: resultados,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -324,7 +319,7 @@ print(url);
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: snapshot.data!.map((flight) {
                                 return Text(
-                                  'Origen: ${flight.aeropuertoOrigen}, Destino: ${flight.aeropuertoDestino}',
+                                  'Origen: ${flight.aeropuertoOrigen}\nDestino: ${flight.aeropuertoDestino} \nHora de salida: ${flight.horaSalida} \nHora de llegada: ${flight.horaLlegada}\n',
                                 );
                               }).toList(),
                             );
@@ -348,16 +343,23 @@ print(url);
 class Flight {
   final String? aeropuertoOrigen;
   final String? aeropuertoDestino;
+  final String? horaSalida;
+  final String? horaLlegada;
 
   const Flight({
     this.aeropuertoOrigen,
     this.aeropuertoDestino,
+    this.horaSalida,
+    this.horaLlegada,
+
   });
 
   factory Flight.fromJson(Map<String, dynamic> json) {
     return Flight(
       aeropuertoOrigen: json['departure']['airport'],
       aeropuertoDestino: json['arrival']['airport'],
+      horaSalida: json['departure']['estimated'],
+      horaLlegada: json['arrival']['estimated'],
     );
   }
 }
