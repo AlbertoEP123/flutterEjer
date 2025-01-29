@@ -32,6 +32,7 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 50),
                   Image.asset(
                     'assets/logo.png',  
                     width: double.infinity,

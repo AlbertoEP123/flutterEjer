@@ -13,7 +13,9 @@ class Pantallabusqueda extends StatefulWidget {
 
 class PantallabusquedaState extends State<Pantallabusqueda> {
   late Future<List<Flight>> resultados;
+  Map<int, bool> favoriteStatus = {};
   Map<String, String> airportData = {};
+
   @override
   void initState() {
     super.initState();
@@ -22,52 +24,31 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
         airportData = data;
       });
     });
-    resultados = Future.value([]); 
+    resultados = Future.value([]);
   }
 
- Future<Map<String, String>> _loadCsvData() async {
+  Future<Map<String, String>> _loadCsvData() async {
+    final rawData = await rootBundle.loadString('assets/airports.csv');
+    List<List<dynamic>> listData =
+        const CsvToListConverter(eol: '\n').convert(rawData);
 
-
-  // Cargar el archivo CSV como texto
-  final rawData = await rootBundle.loadString('assets/airports.csv');
-
-  
-  
-  List<List<dynamic>> listData = const CsvToListConverter(eol: '\n').convert(rawData);
-
-  print("Número de filas: ${listData.length}");
-
-  Map<String, String> data = {};
-  for (int i = 1; i < listData.length; i++) {
-    // Asegurarse de que cada fila tenga suficientes columnas
-    if (listData[i].length > 13) {
-
-      // Intentar obtener los valores de las columnas 10 y 13
-      String key = listData[i][10]?.toString() ?? 'Clave no disponible';
-      if(key.isEmpty){
-        continue;
+    Map<String, String> data = {};
+    for (int i = 1; i < listData.length; i++) {
+      if (listData[i].length > 13) {
+        String key = listData[i][10]?.toString() ?? '';
+        String value = listData[i][13]?.toString() ?? '';
+        if (key.isNotEmpty && value.isNotEmpty) {
+          data[key] = value;
+        }
       }
-      String value = listData[i][13]?.toString() ?? 'Valor no disponible';
-      if(value.isEmpty){
-        continue;
-      }
-   
-      // Agregar los valores al mapa
-      data[key] = value;
-    } else {
-      print("Fila $i tiene menos de 14 columnas.");
     }
+    return data;
   }
-
-  return data;
-}
-
 
   DateTime fechaSalida = DateTime.now();
   DateTime? fechaVuelta;
   int numeroPersonas = 1;
   bool soloIda = false;
-
 
   TextEditingController controladorOrigen = TextEditingController();
   TextEditingController controladorDestino = TextEditingController();
@@ -80,7 +61,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-
     if (fechaSeleccionada != null) {
       setState(() {
         if (esFechaSalida) {
@@ -95,59 +75,56 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   void _buscarVuelos() async {
     try {
       setState(() {
-      });
-
-      // Obtener los códigos IATA de las ciudades de origen y destino
-      // String ciudadOrigen = airportData[controladorOrigen.text]!;
-      // String ciudadDestino = airportData[controladorDestino.text]!;
-      // print(ciudadDestino);
-      // print(ciudadOrigen);
-      // Pasar los códigos IATA a la función para obtener los vuelos
-      setState(() {
-        resultados = fetchAlbum(controladorOrigen.text, controladorDestino.text);
+        resultados =
+            fetchFlights(controladorOrigen.text, controladorDestino.text);
       });
     } catch (e) {
-      // Si hay un error (por ejemplo, ciudad no encontrada), mostrar un mensaje al usuario
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
-  Future<String> _obtenerIATA(String ciudad) async {
-    try {
-      ciudad = ciudad.trim().toLowerCase();
-
-      if (!airportData.containsKey(ciudad)) {
-        throw Exception('Ciudad no encontrada');
-      }
-      var iataCode = airportData[ciudad]!;
-
-    
-      if (iataCode.isEmpty) {
-        throw Exception('Código IATA no disponible para $ciudad');
-      }
-
-      return iataCode;
-    } catch (e) {
-      throw Exception('Error al obtener IATA para $ciudad: $e');
-    }
-  }
-
-  Future<List<Flight>> fetchAlbum(
+  Future<List<Flight>> fetchFlights(
       String ciudadOrigen, String ciudadDestino) async {
     String url =
-        "https://api.aviationstack.com/v1/flights?access_key=4af3d655ae1acbb6ec43c81b9a55d260&dep_iata=$ciudadOrigen&arr_iata=$ciudadDestino";
-    final response = await http.get(Uri.parse(url));
+        "https://api.aviationstack.com/v1/flights?access_key=f2a5651bb06942d6d5c5de3826f27b18&dep_iata=$ciudadOrigen&arr_iata=$ciudadDestino";
 
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body)['data'] as List;
-            print(response.body);
-    
-      List<Flight> vuelos = data.map((json) => Flight.fromJson(json)).toList();
-      return vuelos;
-    } else {
-      throw Exception('Failed to load flights');
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body)['data'] as List;
+        List<Flight> vuelos =
+            data.map((json) => Flight.fromJson(json)).toList();
+
+        // Filtrar vuelos según las fechas
+        return vuelos.where((flight) {
+          DateTime? horaSalida = DateTime.tryParse(flight.horaSalida ?? '');
+          DateTime? horaLlegada = DateTime.tryParse(flight.horaLlegada ?? '');
+
+          if (horaSalida == null) {
+            // Si no se puede parsear la hora de salida, lo descartamos
+            return false;
+          }
+
+          if (horaSalida.isBefore(fechaSalida)) {
+            return false; // Si la hora de salida es antes de la fecha de salida seleccionada, lo excluimos
+          }
+
+          if (fechaVuelta != null &&
+              horaLlegada != null &&
+              horaLlegada.isAfter(fechaVuelta!)) {
+            return false; // Si la hora de llegada es después de la fecha de vuelta, lo excluimos
+          }
+
+          return true; // Si pasa todas las comprobaciones, lo incluimos
+        }).toList();
+      } else {
+        throw Exception(
+            'Error al obtener los vuelos. Código: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error al obtener los vuelos');
     }
   }
 
@@ -168,14 +145,13 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Logo
+                const SizedBox(height: 50),
                 Image.asset(
                   'assets/logo.png',
                   width: double.infinity,
                   height: 120,
                   fit: BoxFit.fitHeight,
                 ),
-
                 const SizedBox(height: 20),
 
                 // Campos de Origen y Destino
@@ -189,7 +165,8 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 16.0),
                         ),
                       ),
                     ),
@@ -202,7 +179,8 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 16.0),
                         ),
                       ),
                     ),
@@ -211,7 +189,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
 
                 const SizedBox(height: 20),
 
-                // Selección de fechas (Salida y Vuelta)
+                // Selección de fechas
                 Row(
                   children: [
                     Expanded(
@@ -222,20 +200,24 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                             labelText: 'Fecha de salida',
                             border: OutlineInputBorder(),
                           ),
-                          child: Text('${fechaSalida.toLocal()}'.split(' ')[0]), // Mostrar fecha de salida
+                          child: Text('${fechaSalida.toLocal()}'.split(' ')[0]),
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onTap: soloIda ? null : () => _seleccionarFecha(context, false),
+                        onTap: soloIda
+                            ? null
+                            : () => _seleccionarFecha(context, false),
                         child: InputDecorator(
                           decoration: const InputDecoration(
                             labelText: 'Fecha de vuelta',
                             border: OutlineInputBorder(),
                           ),
-                          child: Text(fechaVuelta != null ? '${fechaVuelta!.toLocal()}'.split(' ')[0] : 'Selecciona la fecha'),
+                          child: Text(fechaVuelta != null
+                              ? '${fechaVuelta!.toLocal()}'.split(' ')[0]
+                              : 'Selecciona la fecha'),
                         ),
                       ),
                     ),
@@ -291,7 +273,8 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                     ElevatedButton(
                       onPressed: _buscarVuelos,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(127, 30, 206, 229),
+                        backgroundColor:
+                            const Color.fromARGB(127, 30, 206, 229),
                       ),
                       child: const Text('Buscar'),
                     ),
@@ -299,38 +282,75 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                 ),
 
                 const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  color: const Color.fromARGB(255, 165, 196, 226),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FutureBuilder<List<Flight>>(
-                        
-                        future: resultados,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else if (snapshot.hasData) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: snapshot.data!.map((flight) {
-                                return Text(
-                                  'Origen: ${flight.aeropuertoOrigen}\nDestino: ${flight.aeropuertoDestino} \nHora de salida: ${flight.horaSalida} \nHora de llegada: ${flight.horaLlegada}\n',
-                                );
-                              }).toList(),
-                            );
-                          } else {
-                            return const Text('No se encontraron vuelos.');
-                          }
+
+                // Mostrar los resultados
+                FutureBuilder<List<Flight>>(
+                  future: resultados,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final flight = snapshot.data![index];
+
+                          // Obtener el estado favorito de este vuelo
+                          bool isFavorite = favoriteStatus[index] ?? false;
+
+                          return Card(
+                            elevation: 5,
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(16),
+                              leading: Icon(Icons.flight_takeoff,
+                                  color: Colors.blue, size: 40),
+                              title: Text(
+                                  '${flight.aeropuertoOrigen} → ${flight.aeropuertoDestino}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Hora de salida: ${flight.horaSalida}'),
+                                  Text(
+                                      'Hora de llegada: ${flight.horaLlegada}'),
+                                  SizedBox(height: 8),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.favorite,
+                                      color: isFavorite
+                                          ? Colors.red
+                                          : Colors.grey, // Cambia de color
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        favoriteStatus[index] =
+                                            !isFavorite; // Cambiar el estado del favorito para este vuelo
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              trailing: Icon(Icons.arrow_forward_ios,
+                                  color: Colors.blue),
+                            ),
+                          );
                         },
-                      )
-                    ],
-                  ),
-                ),
+                      );
+                    } else {
+                      return Center(child: Text('No se encontraron vuelos.'));
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -351,7 +371,6 @@ class Flight {
     this.aeropuertoDestino,
     this.horaSalida,
     this.horaLlegada,
-
   });
 
   factory Flight.fromJson(Map<String, dynamic> json) {
