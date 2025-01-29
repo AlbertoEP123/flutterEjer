@@ -4,11 +4,11 @@ class Pantallavuelosguardados extends StatefulWidget {
   const Pantallavuelosguardados({super.key});
 
   @override
-  _PantallavuelosguardadosState createState() =>
-      _PantallavuelosguardadosState();
+  PantallavuelosguardadosState createState() =>
+      PantallavuelosguardadosState();
 }
 
-class _PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
+class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
   late Future<List<Map<String, dynamic>>> favoritos;
 
   @override

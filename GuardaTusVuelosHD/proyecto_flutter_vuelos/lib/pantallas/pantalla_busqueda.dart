@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
+import 'package:proyecto_flutter_vuelos/api/api_app.dart';
+import 'package:proyecto_flutter_vuelos/model/flight.dart';
 
 class Pantallabusqueda extends StatefulWidget {
   const Pantallabusqueda({super.key});
@@ -19,31 +19,31 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   @override
   void initState() {
     super.initState();
-    _loadCsvData().then((data) {
-      setState(() {
-        airportData = data;
-      });
-    });
+    // _loadCsvData().then((data) {
+    //   setState(() {
+    //     airportData = data;
+    //   });
+    // });
     resultados = Future.value([]);
   }
 
-  Future<Map<String, String>> _loadCsvData() async {
-    final rawData = await rootBundle.loadString('assets/airports.csv');
-    List<List<dynamic>> listData =
-        const CsvToListConverter(eol: '\n').convert(rawData);
+  // Future<Map<String, String>> _loadCsvData() async {
+  //   final rawData = await rootBundle.loadString('assets/airports.csv');
+  //   List<List<dynamic>> listData =
+  //       const CsvToListConverter(eol: '\n').convert(rawData);
 
-    Map<String, String> data = {};
-    for (int i = 1; i < listData.length; i++) {
-      if (listData[i].length > 13) {
-        String key = listData[i][10]?.toString() ?? '';
-        String value = listData[i][13]?.toString() ?? '';
-        if (key.isNotEmpty && value.isNotEmpty) {
-          data[key] = value;
-        }
-      }
-    }
-    return data;
-  }
+  //   Map<String, String> data = {};
+  //   for (int i = 1; i < listData.length; i++) {
+  //     if (listData[i].length > 13) {
+  //       String key = listData[i][10]?.toString() ?? '';
+  //       String value = listData[i][13]?.toString() ?? '';
+  //       if (key.isNotEmpty && value.isNotEmpty) {
+  //         data[key] = value;
+  //       }
+  //     }
+  //   }
+  //   return data;
+  // }
 
   DateTime fechaSalida = DateTime.now();
   DateTime? fechaVuelta;
@@ -76,7 +76,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     try {
       setState(() {
         resultados =
-            fetchFlights(controladorOrigen.text, controladorDestino.text);
+           ApiApp.fetchFlights(controladorOrigen.text, controladorDestino.text, fechaSalida, fechaVuelta!);
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -84,49 +84,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     }
   }
 
-  Future<List<Flight>> fetchFlights(
-      String ciudadOrigen, String ciudadDestino) async {
-    String url =
-        "https://api.aviationstack.com/v1/flights?access_key=f2a5651bb06942d6d5c5de3826f27b18&dep_iata=$ciudadOrigen&arr_iata=$ciudadDestino";
-
-    try {
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body)['data'] as List;
-        List<Flight> vuelos =
-            data.map((json) => Flight.fromJson(json)).toList();
-
-        // Filtrar vuelos según las fechas
-        return vuelos.where((flight) {
-          DateTime? horaSalida = DateTime.tryParse(flight.horaSalida ?? '');
-          DateTime? horaLlegada = DateTime.tryParse(flight.horaLlegada ?? '');
-
-          if (horaSalida == null) {
-            // Si no se puede parsear la hora de salida, lo descartamos
-            return false;
-          }
-
-          if (horaSalida.isBefore(fechaSalida)) {
-            return false; // Si la hora de salida es antes de la fecha de salida seleccionada, lo excluimos
-          }
-
-          if (fechaVuelta != null &&
-              horaLlegada != null &&
-              horaLlegada.isAfter(fechaVuelta!)) {
-            return false; // Si la hora de llegada es después de la fecha de vuelta, lo excluimos
-          }
-
-          return true; // Si pasa todas las comprobaciones, lo incluimos
-        }).toList();
-      } else {
-        throw Exception(
-            'Error al obtener los vuelos. Código: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error al obtener los vuelos');
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -238,6 +196,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                           if (!soloIda) {
                             fechaVuelta = null;
                           }
+                          
                         });
                       },
                     ),
@@ -360,25 +319,3 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   }
 }
 
-class Flight {
-  final String? aeropuertoOrigen;
-  final String? aeropuertoDestino;
-  final String? horaSalida;
-  final String? horaLlegada;
-
-  const Flight({
-    this.aeropuertoOrigen,
-    this.aeropuertoDestino,
-    this.horaSalida,
-    this.horaLlegada,
-  });
-
-  factory Flight.fromJson(Map<String, dynamic> json) {
-    return Flight(
-      aeropuertoOrigen: json['departure']['airport'],
-      aeropuertoDestino: json['arrival']['airport'],
-      horaSalida: json['departure']['estimated'],
-      horaLlegada: json['arrival']['estimated'],
-    );
-  }
-}
