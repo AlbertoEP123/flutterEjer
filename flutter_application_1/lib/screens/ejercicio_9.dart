@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/drawer.dart';
+import 'package:flutter_application_1/screens/drawer.dart';
 
 class JuegoAleatorioScreen extends StatefulWidget {
   const JuegoAleatorioScreen({super.key});
@@ -42,7 +42,7 @@ class JuegoAleatorioScreenState extends State<JuegoAleatorioScreen> {
         _posY = _aleatorio.nextDouble() * 600;
       });
 
-      // Eliminar la imagen después de un tiempo
+      // Elimina la imagen después de un tiempo
       _imagenTimer = Timer(const Duration(seconds: 1), () {
         if (mounted && _imagenVisible) { // Verifica que el widget aún está montado
           setState(() {

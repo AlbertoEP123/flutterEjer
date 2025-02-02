@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/drawer.dart';
+import 'package:flutter_application_1/screens/drawer.dart';
 
 class Ejercicio3 extends StatelessWidget {
   const Ejercicio3({super.key});

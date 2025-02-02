@@ -1,12 +1,12 @@
 // ejercicios/ejercicios.dart
-export './drawer.dart';
+export 'drawer.dart';
 export 'ejercicio_2.dart';
 export 'ejercicio_3.dart';
 export 'ejercicio_4.dart';
 export 'ejercicio_5.dart';
 export 'ejercicio_6.dart';
 export 'ejercicio_7.dart';
-export './instagram/instagram_parte_alta.dart';
+export 'instagram/instagram_parte_alta.dart';
 export 'ejercicio_9.dart';
 export 'ejercicio_10.dart';
 export 'ejercicio_11.dart';

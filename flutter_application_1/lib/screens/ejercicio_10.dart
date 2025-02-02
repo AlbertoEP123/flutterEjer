@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/drawer.dart';
+import 'package:flutter_application_1/screens/drawer.dart';
 
 class Ejercicio10 extends StatefulWidget {
   const Ejercicio10({super.key});

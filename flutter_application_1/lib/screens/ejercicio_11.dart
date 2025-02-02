@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'dart:math'; // Importamos Random
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/drawer.dart';
+import 'package:flutter_application_1/screens/drawer.dart';
 
 class Ejercicio11 extends StatefulWidget {
   const Ejercicio11({super.key});
@@ -38,8 +38,9 @@ class _FormularioState extends State<Ejercicio11> {
     // Verifico si el formulario es válido
     if (_formKey.currentState?.validate() ?? false) {
      
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Formulario enviado con éxito')),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Formulario enviado con éxito')),
+        
       );
     }
   }
@@ -134,11 +135,14 @@ class _FormularioState extends State<Ejercicio11> {
                         onTap: () => _selectDate(context),
                         child: AbsorbPointer(
                           child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Fecha de nacimiento',
-                              hintText: _fechaSeleccionada == null
-                                  ? 'Selecciona tu fecha'
+                            controller: TextEditingController(
+                              text: _fechaSeleccionada == null
+                                  ? ''
                                   : _fechaSeleccionada!.toLocal().toString().split(' ')[0],
+                            ),
+                            decoration: const InputDecoration(
+                              labelText: 'Fecha de nacimiento',
+                              hintText: 'Selecciona tu fecha',
                             ),
                             validator: (value) {
                               if (_fechaSeleccionada == null) {
@@ -147,6 +151,12 @@ class _FormularioState extends State<Ejercicio11> {
                               return null;
                             },
                           ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: AbsorbPointer(
+                      
                         ),
                       ),
                       const SizedBox(height: 16),

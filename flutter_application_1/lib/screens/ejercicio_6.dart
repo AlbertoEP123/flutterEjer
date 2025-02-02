@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/drawer.dart';
+import 'package:flutter_application_1/screens/drawer.dart';
 
 class Ejercicio6 extends StatelessWidget {
   const Ejercicio6({super.key});
@@ -15,7 +15,7 @@ class Ejercicio6 extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // Primera fila 
+          // Primera fila con una columna
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -32,7 +32,7 @@ class Ejercicio6 extends StatelessWidget {
               ),
             ],
           ),
-          // Segunda fila 
+          // Segunda fila con dos columnas
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -60,7 +60,7 @@ class Ejercicio6 extends StatelessWidget {
               ),
             ],
           ),
-          // Tercera fila 
+          // Tercera fila con tres columnas
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

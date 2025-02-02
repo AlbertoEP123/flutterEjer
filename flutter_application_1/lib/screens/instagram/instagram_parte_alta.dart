@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ejercicios/instagram/instagram_destacadas.dart';
-import 'package:flutter_application_1/ejercicios/drawer.dart'; 
+import 'package:flutter_application_1/screens/instagram/instagram_destacadas.dart';
+import 'package:flutter_application_1/screens/drawer.dart'; 
 
 class Instagrampartealta extends StatelessWidget {
   const Instagrampartealta({
