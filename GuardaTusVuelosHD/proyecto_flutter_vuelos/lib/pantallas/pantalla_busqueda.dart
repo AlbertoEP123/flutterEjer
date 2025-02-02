@@ -30,6 +30,24 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     resultados = Future.value([]);
   }
 
+  // actualizar texto de origen
+  void _updateOrigenText(String text) {
+    final codigo = ApiApp.obtenerCodigoA(text.toUpperCase()) ?? text;
+    controladorOrigen.value = TextEditingValue(
+      text: codigo,
+      selection: TextSelection.collapsed(offset: codigo.length),
+    );
+  }
+
+  // actualizar texto de destino
+  void _updateDestinoText(String text) {
+    final codigo = ApiApp.obtenerCodigoA(text.toUpperCase()) ?? text;
+    controladorDestino.value = TextEditingValue(
+      text: codigo,
+      selection: TextSelection.collapsed(offset: codigo.length),
+    );
+  }
+
   // seleccionar fecha
   Future<void> _seleccionarFecha(
       BuildContext context, bool esFechaSalida) async {
@@ -56,7 +74,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       setState(() {
         resultados =
         // metodo que busca vuelos en la api
-           ApiApp.fetchFlights(controladorOrigen.text, controladorDestino.text, fechaSalida, fechaVuelta,soloIda ? 2:1,numeroPersonas);
+           ApiApp.fetchFlights(controladorOrigen.text.toUpperCase(), controladorDestino.text.toUpperCase(), fechaSalida, fechaVuelta,soloIda ? 2:1,numeroPersonas);
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -103,6 +121,12 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                     Expanded(
                       child: TextField(
                         controller: controladorOrigen,
+                        onChanged: (text) {
+                          setState(() {
+                            _updateOrigenText(text);
+                          });
+                        },
+                        // Convierte el texto a mayúsculas
                         decoration: InputDecoration(
                           labelText: 'Origen',
                           filled: true,
@@ -118,6 +142,11 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                     Expanded(
                       child: TextField(
                         controller: controladorDestino,
+                        onChanged: (text) {
+                          setState(() {
+                            _updateDestinoText(text);
+                          });
+                        },
                         decoration: InputDecoration(
                           labelText: 'Destino',
                           filled: true,
@@ -253,9 +282,9 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                             elevation: 5,
                             margin: const EdgeInsets.symmetric(vertical: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(20),                        
                             ),
-                            child: ListTile(
+                            child: ListTile(                              
                               contentPadding: const EdgeInsets.all(16),
                               leading: Icon(Icons.flight_takeoff,
                                   color: Colors.blue, size: 40),
@@ -289,8 +318,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                                   Text("Precio: ${flight.precio} €"),
                                 ],
                               ),
-                              trailing: Icon(Icons.arrow_forward_ios,
-                                  color: Colors.blue),
+                             
                             ),
                           );
                         },

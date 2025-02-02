@@ -56,5 +56,37 @@ static Future<List<Flight>> fetchFlights(
       throw Exception('Error al obtener los vuelos');
     }
   }
- 
+
+  // Metodo para obtener los aeropuertos
+  static String? obtenerCodigoA(String ciudad){
+      Map<String, String> aeropuertos = {
+      "Madrid": "MAD",
+      "Barcelona": "BCN",
+      "Valencia": "VLC",
+      "Sevilla": "SVQ",
+      "Bilbao": "BIO",
+      "Málaga": "AGP",
+      "Alicante": "ALC",
+      "Palma de Mallorca": "PMI",
+      "Las Palmas de Gran Canaria": "LPA",
+      "Tenerife": "TFN",
+      "Granada": "GRX",
+      "Santiago de Compostela": "SCQ",
+      "Vigo": "VGO",
+      "Oviedo": "OVD",
+      "Pamplona": "PNA",
+      "Santander": "SDR",
+      "San Sebastián": "EAS",
+      "Zaragoza": "ZAZ",
+      "Girona": "GRO",
+      "Reus": "REU",
+      "Jerez de la Frontera": "XRY",
+      "Almería": "LEI",
+      "Gerona": "GRO",
+     
+    };
+    return aeropuertos[ciudad];
+  }
+
+
 }
