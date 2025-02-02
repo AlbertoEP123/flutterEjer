@@ -10,11 +10,12 @@ class Drawerinicio extends StatefulWidget {
   @override
   DrawerinicioState createState() => DrawerinicioState();
 }
-
+// drawer que contiene las opciones de búsqueda, vuelos guardados y configuración
 class DrawerinicioState extends State<Drawerinicio> {
+  // Índice de la pantalla seleccionada
   int _selectedIndex = 0;
 
-  
+  // Lista de pantallas        
   static const List<Widget> _screens = <Widget>[
     Pantallabusqueda(),
     Pantallavuelosguardados(),
@@ -30,7 +31,7 @@ class DrawerinicioState extends State<Drawerinicio> {
 
   @override
   Widget build(BuildContext context) {
-    // mediquery para que se adapte a la pantalla
+    // mediaquery para que se adapte a la pantalla
     final screenWidth = MediaQuery.of(context).size.width;
     final bottomNavHeight = 70.0; 
 
@@ -43,7 +44,7 @@ class DrawerinicioState extends State<Drawerinicio> {
           ),
         ],
       ),
-
+      // Barra de navegación inferior
       bottomNavigationBar: Container(
         color: Colors.blue[50], 
         height: bottomNavHeight,

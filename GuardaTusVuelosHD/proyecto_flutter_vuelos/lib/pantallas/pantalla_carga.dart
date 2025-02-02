@@ -6,6 +6,7 @@ class PantallaCarga extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Simula una carga de 8 segundos
     Future.delayed(const Duration(seconds: 8), () {
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously

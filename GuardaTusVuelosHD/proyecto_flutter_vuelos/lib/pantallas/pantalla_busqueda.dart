@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:csv/csv.dart';
 import 'package:proyecto_flutter_vuelos/api/api_app.dart';
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
 
@@ -11,40 +9,12 @@ class Pantallabusqueda extends StatefulWidget {
   PantallabusquedaState createState() => PantallabusquedaState();
 }
 
+
 class PantallabusquedaState extends State<Pantallabusqueda> {
+  // variables
   late Future<List<Flight>> resultados;
   Map<int, bool> favoriteStatus = {};
   Map<String, String> airportData = {};
-
-  @override
-  void initState() {
-    super.initState();
-    // _loadCsvData().then((data) {
-    //   setState(() {
-    //     airportData = data;
-    //   });
-    // });
-    resultados = Future.value([]);
-  }
-
-  // Future<Map<String, String>> _loadCsvData() async {
-  //   final rawData = await rootBundle.loadString('assets/airports.csv');
-  //   List<List<dynamic>> listData =
-  //       const CsvToListConverter(eol: '\n').convert(rawData);
-
-  //   Map<String, String> data = {};
-  //   for (int i = 1; i < listData.length; i++) {
-  //     if (listData[i].length > 13) {
-  //       String key = listData[i][10]?.toString() ?? '';
-  //       String value = listData[i][13]?.toString() ?? '';
-  //       if (key.isNotEmpty && value.isNotEmpty) {
-  //         data[key] = value;
-  //       }
-  //     }
-  //   }
-  //   return data;
-  // }
-
   DateTime fechaSalida = DateTime.now();
   DateTime fechaVuelta = DateTime.now();
   int numeroPersonas = 1;
@@ -53,6 +23,14 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   TextEditingController controladorOrigen = TextEditingController();
   TextEditingController controladorDestino = TextEditingController();
 
+  // inicizalizo variable resultados
+  @override
+  void initState() {
+    super.initState();
+    resultados = Future.value([]);
+  }
+
+  // seleccionar fecha
   Future<void> _seleccionarFecha(
       BuildContext context, bool esFechaSalida) async {
     final DateTime? fechaSeleccionada = await showDatePicker(
@@ -61,6 +39,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
+    // metodo que actualiza la fecha
     if (fechaSeleccionada != null) {
       setState(() {
         if (esFechaSalida) {
@@ -71,26 +50,30 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       });
     }
   }
-
+  // metodo que busca vuelos con los parametros introducidos
   void _buscarVuelos() async {
     try {
       setState(() {
         resultados =
-           ApiApp.fetchFlights(controladorOrigen.text, controladorDestino.text, fechaSalida, fechaVuelta!,soloIda ? 2:1,numeroPersonas);
+        // metodo que busca vuelos en la api
+           ApiApp.fetchFlights(controladorOrigen.text, controladorDestino.text, fechaSalida, fechaVuelta,soloIda ? 2:1,numeroPersonas);
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
+
           .showSnackBar(SnackBar(content: Text('Error: $e')));
+          print(e.toString());
     }
   }
 
   
-
+// metodo que construye la pantalla de busqueda
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          // BoxDecoration para el gradiente de fondo
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -98,6 +81,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
               colors: [Colors.blue[50]!, Colors.white],
             ),
           ),
+          // Padding para ellogo
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -106,13 +90,14 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                 const SizedBox(height: 50),
                 Image.asset(
                   'assets/logo.png',
+                  // Ajusta la imagen al ancho de la pantalla
                   width: double.infinity,
-                  height: 120,
+                  height: 120,                
                   fit: BoxFit.fitHeight,
                 ),
                 const SizedBox(height: 20),
 
-                // Campos de Origen y Destino
+                // Campo de origen
                 Row(
                   children: [
                     Expanded(
@@ -129,6 +114,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                       ),
                     ),
                     const SizedBox(width: 8),
+                    // campo de destino
                     Expanded(
                       child: TextField(
                         controller: controladorDestino,
@@ -164,6 +150,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                     ),
                     const SizedBox(width: 8),
                     Expanded(
+                      // Si solo es ida, no se puede seleccionar la fecha de vuelta
                       child: GestureDetector(
                         onTap: soloIda
                             ? null
@@ -173,9 +160,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                             labelText: 'Fecha de vuelta',
                             border: OutlineInputBorder(),
                           ),
-                          child: Text(fechaVuelta != null
-                              ? '${fechaVuelta!.toLocal()}'.split(' ')[0]
-                              : 'Selecciona la fecha'),
+                          child: Text('${fechaVuelta.toLocal()}'.split(' ')[0]),
                         ),
                       ),
                     ),
@@ -226,8 +211,10 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                         underline: Container(),
                       ),
                     ),
+                    // Botón de búsqueda
                     const SizedBox(width: 8),
                     ElevatedButton(
+                      // Llama al método de búsqueda
                       onPressed: _buscarVuelos,
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -240,24 +227,28 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
 
                 const SizedBox(height: 20),
 
-                // Mostrar los resultados
+                // FutureBuilder para mostrar los resultados
                 FutureBuilder<List<Flight>>(
                   future: resultados,
                   builder: (context, snapshot) {
+                    // Si está cargando, muestra un indicador de progreso
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
                       return ListView.builder(
+                        // Para que el ListView no ocupe más espacio del necesario
                         shrinkWrap: true,
+                        // Número de elementos en la lista
                         itemCount: snapshot.data!.length,
+                        // Constructor de cada elemento de la lista
                         itemBuilder: (context, index) {
                           final flight = snapshot.data![index];
 
                           // Obtener el estado favorito de este vuelo
                           bool isFavorite = favoriteStatus[index] ?? false;
-
+                          // Construir el elemento de la lista
                           return Card(
                             elevation: 5,
                             margin: const EdgeInsets.symmetric(vertical: 8),
@@ -291,7 +282,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                                     onPressed: () {
                                       setState(() {
                                         favoriteStatus[index] =
-                                            !isFavorite; // Cambiar el estado del favorito para este vuelo
+                                            !isFavorite; // Cambia el estado del favorito para este vuelo
                                       });
                                     },
                                   ),
