@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/api/api_app.dart';
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
+import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart';
 
 class Pantallabusqueda extends StatefulWidget {
   const Pantallabusqueda({super.key});
@@ -68,14 +69,41 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       });
     }
   }
+void _toggleFavorite(int index, Flight flight) async {
+  final dbHelper = DatabaseHelper.instance;
+
+  try {
+    // Realizar la operación asíncrona primero
+    if (favoriteStatus[index] ?? false) {
+      // Si ya es favorito, lo eliminamos
+      if (flight.id != null) {
+        await dbHelper.deleteFavorite(flight.id!);
+      }
+    } else {
+      // Si no es favorito, lo agregamos
+      await dbHelper.insertFavorite(flight.toMap());
+    }
+
+    // Luego, actualizar el estado de la interfaz de usuario
+    setState(() {
+      favoriteStatus[index] = !(favoriteStatus[index] ?? false);
+    });
+  } catch (e) {
+    // Manejar el error (por ejemplo, mostrar un SnackBar)
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  }
+}
   // metodo que busca vuelos con los parametros introducidos
   void _buscarVuelos() async {
     try {
       setState(() {
         resultados =
         // metodo que busca vuelos en la api
-           ApiApp.fetchFlights(controladorOrigen.text.toUpperCase(), controladorDestino.text.toUpperCase(), fechaSalida, fechaVuelta, soloIda ? 2 : 1, numeroPersonas);
-           print(Flight.getFavoritos());
+        
+             ApiApp.fetchFlights(controladorOrigen.text.toUpperCase(), controladorDestino.text.toUpperCase(), fechaSalida, fechaVuelta, soloIda ? 2 : 1, numeroPersonas);
+           
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -309,14 +337,13 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                                       size: 20,
                                     ),
                                     onPressed: () {
-                                      setState(() {
-                                        favoriteStatus[index] =
-                                            !isFavorite;
-                                        if (isFavorite) {
-                                          Flight.addFavorite(flight);
-                                        }
+                                      setState(() =>
+                                        _toggleFavorite(index, flight)
+                                      );
+                                    
+                                        
                                             
-                                      });
+                                     
                                     },
                                   ),
                                   Text("Precio: ${flight.precio} €"),

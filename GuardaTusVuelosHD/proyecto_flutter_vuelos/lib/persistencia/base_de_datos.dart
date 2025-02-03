@@ -1,12 +1,12 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Usa sqflite_common_ffi
 import 'package:path/path.dart';
 
+import '../model/flight.dart';
+
 // Definir las clases para la base de datos
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
-
-
 
   DatabaseHelper._init();
 
@@ -19,28 +19,29 @@ class DatabaseHelper {
   Future<Database> _initDB(String path) async {
     final dbPath = await getDatabasesPath();
     final fullPath = join(dbPath, path);
-    return openDatabase(fullPath, version: 1, onCreate: _createDB);
+    return await openDatabase(fullPath, version: 1, onCreate: _createDB);
   }
 
-  void _createDB(Database db, int version) async {
-    await db.execute(''' 
+ void _createDB(Database db, int version) async {
+  await db.execute('''
     CREATE TABLE favoritos(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       aeropuertoOrigen TEXT,
       aeropuertoDestino TEXT,
       horaSalida TEXT,
-      horaLlegada TEXT
+      horaLlegada TEXT,
+      precio INTEGER
     )
-    ''');
-  }
+  ''');
+}
 
-  // Inserción de un vuelo en la base de datos
-  Future<int> insertFavorite(Map<String, dynamic> flightData) async {
+  // Insertar un vuelo en la base de datos
+ Future<int> insertFavorite(Map<String, dynamic> flightData) async {
     final db = await instance.database;
-    return await db.insert('favoritos', flightData);
+    return await db.insert('favoritos', flightData); // Acepta un Map<String, dynamic>
   }
 
-  // Eliminación de un vuelo por su ID
+  // Eliminar un vuelo por su ID
   Future<int> deleteFavorite(int id) async {
     final db = await instance.database;
     return await db.delete(
@@ -50,4 +51,12 @@ class DatabaseHelper {
     );
   }
 
+  // Obtener todos los vuelos favoritos
+  Future<List<Flight>> getFavorites() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query('favoritos');
+    return List.generate(maps.length, (i) {
+      return Flight.fromMap(maps[i]);
+    });
+  }
 }
