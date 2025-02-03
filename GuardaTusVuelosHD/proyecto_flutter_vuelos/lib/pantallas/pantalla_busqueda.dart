@@ -74,13 +74,13 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       setState(() {
         resultados =
         // metodo que busca vuelos en la api
-           ApiApp.fetchFlights(controladorOrigen.text.toUpperCase(), controladorDestino.text.toUpperCase(), fechaSalida, fechaVuelta,soloIda ? 2:1,numeroPersonas);
+           ApiApp.fetchFlights(controladorOrigen.text.toUpperCase(), controladorDestino.text.toUpperCase(), fechaSalida, fechaVuelta, soloIda ? 2 : 1, numeroPersonas);
+           print(Flight.getFavoritos());
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
 
           .showSnackBar(SnackBar(content: Text('Error: $e')));
-          print(e.toString());
     }
   }
 
@@ -311,7 +311,11 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                                     onPressed: () {
                                       setState(() {
                                         favoriteStatus[index] =
-                                            !isFavorite; // Cambia el estado del favorito para este vuelo
+                                            !isFavorite;
+                                        if (isFavorite) {
+                                          Flight.addFavorite(flight);
+                                        }
+                                            
                                       });
                                     },
                                   ),

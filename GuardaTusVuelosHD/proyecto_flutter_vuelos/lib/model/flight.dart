@@ -22,4 +22,16 @@ class Flight {
       precio: json['price']
     );
   }
+
+  static void addFavorite(Flight vuelo) {
+    List<Flight> favList = [];
+
+    favList.add(vuelo);
+  }
+
+  static Future<List<Flight>> getFavoritos() async {
+    List<Flight> favList = [];
+
+    return favList;
+  }
 }

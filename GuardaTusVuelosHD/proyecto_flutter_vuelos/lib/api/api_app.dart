@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
 
+
 class ApiApp {
 
 // Metodo para obtener los vuelos
@@ -88,5 +89,7 @@ static Future<List<Flight>> fetchFlights(
     return aeropuertos[ciudad];
   }
 
+  
+  
 
 }

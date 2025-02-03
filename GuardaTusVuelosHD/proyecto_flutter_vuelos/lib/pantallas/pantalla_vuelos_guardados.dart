@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_flutter_vuelos/model/flight.dart';
 
 class Pantallavuelosguardados extends StatefulWidget {
   const Pantallavuelosguardados({super.key});
@@ -6,15 +7,17 @@ class Pantallavuelosguardados extends StatefulWidget {
   @override
   PantallavuelosguardadosState createState() =>
       PantallavuelosguardadosState();
+
+  
 }
 
 class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
-  late Future<List<Map<String, dynamic>>> favoritos;
+   late Future<List<Flight>> favoritos;
 
   @override
   void initState() {
     super.initState();
-    //favoritos = DatabaseHelper.instance.queryAllFavorites(); // Obtenemos los favoritos
+    favoritos= Flight.getFavoritos();   
   }
 
   @override
@@ -48,7 +51,33 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 20),
-
+              FutureBuilder<List<Flight>>(
+                future: favoritos,
+                builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error al cargar los vuelos'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No tienes vuelos guardados'));
+                } else {
+                  return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final flight = snapshot.data![index];
+                    return Card(
+                    child: ListTile(
+                        title: Text(favoritos.toString().substring(1, favoritos.toString().toLowerCase()  .length - 1)),
+                      subtitle: Text('Fecha: ${flight.horaSalida}'),
+                    ),
+                    );
+                  },
+                  );
+                }
+                },
+              ),
               
               ],
             ),
