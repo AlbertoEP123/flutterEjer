@@ -17,7 +17,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
   @override
   void initState() {
     super.initState();
-    favoritos= Flight.getFavoritos();   
+     
   }
 
   @override
@@ -69,7 +69,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                     final flight = snapshot.data![index];
                     return Card(
                     child: ListTile(
-                        title: Text(favoritos.toString().substring(1, favoritos.toString().toLowerCase()  .length - 1)),
+                        title: Text(flight.aeropuertoOrigen!),
                       subtitle: Text('Fecha: ${flight.horaSalida}'),
                     ),
                     );

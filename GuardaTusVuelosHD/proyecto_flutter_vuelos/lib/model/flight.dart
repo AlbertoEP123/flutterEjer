@@ -29,9 +29,9 @@ class Flight {
     favList.add(vuelo);
   }
 
-  static Future<List<Flight>> getFavoritos() async {
+  static Future<String?> getFavoritos() async {
     List<Flight> favList = [];
 
-    return favList;
+    return favList[0].aeropuertoOrigen;
   }
 }
