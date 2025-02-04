@@ -1,25 +1,23 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Usa sqflite_common_ffi
-import 'package:path/path.dart';
-
 import '../model/flight.dart';
 
 // Definir las clases para la base de datos
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
-
+  
   DatabaseHelper._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('favorites.db');
-    return _database!;
+    _database = await _initDB('./lib/persistencia/guardaVuelosDB.db');
+    
+      return _database!;
   }
 
   Future<Database> _initDB(String path) async {
-    final dbPath = await getDatabasesPath();
-    final fullPath = join(dbPath, path);
-    return await openDatabase(fullPath, version: 1, onCreate: _createDB);
+    
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
  void _createDB(Database db, int version) async {
@@ -51,6 +49,11 @@ class DatabaseHelper {
     );
   }
 
+  Future <Flight> buscarID(int id) async {
+    final db = await instance.database;
+    return await db.query('favoritos', where: 'id = ?', 
+    whereArgs: [id]).then((value) =>  Flight.fromMap(value.first));
+  }
   // Obtener todos los vuelos favoritos
   Future<List<Flight>> getFavorites() async {
     final db = await instance.database;

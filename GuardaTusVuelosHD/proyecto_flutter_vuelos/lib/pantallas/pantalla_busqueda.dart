@@ -13,7 +13,7 @@ class Pantallabusqueda extends StatefulWidget {
 
 class PantallabusquedaState extends State<Pantallabusqueda> {
   // variables
-  late Future<List<Flight>> resultados;
+  static Future<List<Flight>> resultados = Future.value([]);
   Map<int, bool> favoriteStatus = {};
   Map<String, String> airportData = {};
   DateTime fechaSalida = DateTime.now();
@@ -28,7 +28,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   @override
   void initState() {
     super.initState();
-    resultados = Future.value([]);
+    
   }
 
   // actualizar texto de origen
@@ -69,22 +69,21 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       });
     }
   }
-void _toggleFavorite(int index, Flight flight) async {
+void _toggleFavorite(int index, Flight flight)  {
   final dbHelper = DatabaseHelper.instance;
 
   try {
-    // Realizar la operación asíncrona primero
     if (favoriteStatus[index] ?? false) {
       // Si ya es favorito, lo eliminamos
       if (flight.id != null) {
-        await dbHelper.deleteFavorite(flight.id!);
+         dbHelper.deleteFavorite(flight.id!);
       }
     } else {
       // Si no es favorito, lo agregamos
-      await dbHelper.insertFavorite(flight.toMap());
+       dbHelper.insertFavorite(flight.toMap());
     }
 
-    // Luego, actualizar el estado de la interfaz de usuario
+    // Luego, actualizar el estado de la interfaz de usuario (dentro de setState)
     setState(() {
       favoriteStatus[index] = !(favoriteStatus[index] ?? false);
     });
@@ -127,7 +126,7 @@ void _toggleFavorite(int index, Flight flight) async {
               colors: [Colors.blue[50]!, Colors.white],
             ),
           ),
-          // Padding para ellogo
+          // Padding para el logo
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -339,11 +338,7 @@ void _toggleFavorite(int index, Flight flight) async {
                                     onPressed: () {
                                       setState(() =>
                                         _toggleFavorite(index, flight)
-                                      );
-                                    
-                                        
-                                            
-                                     
+                                      );                                     
                                     },
                                   ),
                                   Text("Precio: ${flight.precio} €"),
