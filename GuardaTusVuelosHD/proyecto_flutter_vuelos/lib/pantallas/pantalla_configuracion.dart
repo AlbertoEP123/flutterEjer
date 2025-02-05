@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_flutter_vuelos/persistencia/bd_configuracion.dart';
+
 
 class PantallaConfiguracion extends StatefulWidget {
   const PantallaConfiguracion({super.key});
@@ -6,16 +8,31 @@ class PantallaConfiguracion extends StatefulWidget {
   @override
   PantallaConfiguracionState createState() => PantallaConfiguracionState();
 }
+BdConfiguracion bd = BdConfiguracion();
+
+Future<void> _botonPref(String moneda, String idioma) async {
+  
+ await bd.savePreferences(moneda,idioma);
+  
+}
 
 class PantallaConfiguracionState extends State<PantallaConfiguracion> {
-  String moneda = 'USD';
-  String idioma = 'Español';
-  bool notificaciones = true;
+  static String moneda = 'USD';
+  static String idioma = 'Español';
+
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
+   
+
     return Scaffold(
-     
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(1.0),
@@ -36,7 +53,7 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
                   Image.asset(
                     'assets/logo.png',  
                     width: double.infinity,
-                    height: 120,
+                    height: 170,
                     fit: BoxFit.fitHeight 
                   ),
                   const SizedBox(height: 60),
@@ -45,16 +62,18 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
                   DropdownButton<String>(
                     value: moneda,
                     onChanged: (String? newValue) {
-                      setState(() {
-                        moneda = newValue!;
-                      });
+                      if (newValue != null) {
+                        setState(() {
+                          moneda = newValue;
+                          print(moneda);
+                        });
+                      }
                     },
                     items: ['USD', 'EUR', 'MXN', 'GBP']
                         .map<DropdownMenuItem<String>>((String valor) {
                       return DropdownMenuItem<String>(
                         value: valor,
-                        child: Text('Moneda: $valor')
-                        ,
+                        child: Text('Moneda: $valor'),
                       );
                     }).toList(),
                     isExpanded: true,
@@ -66,9 +85,11 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
                   DropdownButton<String>(
                     value: idioma,
                     onChanged: (String? newValue) {
-                      setState(() {
-                        idioma = newValue!;
-                      });
+                      if (newValue != null) {
+                        setState(() {
+                          idioma = newValue;
+                        });
+                      }
                     },
                     items: ['Español', 'Inglés', 'Francés', 'Alemán']
                         .map<DropdownMenuItem<String>>((String valor) {
@@ -82,15 +103,14 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
 
                   const SizedBox(height: 20),
 
-                  // Configuración de notificaciones
-                  SwitchListTile(
-                    title: const Text('Habilitar notificaciones'),
-                    value: notificaciones,
-                    onChanged: (bool valor) {
-                      setState(() {
-                        notificaciones = valor;
-                      });
-                    },
+                  // Botón para guardar la configuración
+                  ElevatedButton(
+                    onPressed: () => _botonPref(moneda,idioma),
+          
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.blue,
+                    ),
+                    child: const Text('Guardar Configuración'),
                   ),
                 ],
               ),
@@ -101,3 +121,5 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
     );
   }
 }
+
+

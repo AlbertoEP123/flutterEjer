@@ -28,7 +28,9 @@ class DatabaseHelper {
       aeropuertoDestino TEXT,
       horaSalida TEXT,
       horaLlegada TEXT,
-      precio INTEGER
+      precio INTEGER,
+      aerolinea TEXT,
+      moneda TEXT
     )
   ''');
 }
@@ -47,6 +49,15 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+   Future<bool> isFavorite(Flight flight) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'favoritos',
+      where: 'aeropuertoOrigen = ? AND aeropuertoDestino = ? AND horaSalida = ? AND horaLlegada = ?',
+      whereArgs: [flight.aeropuertoOrigen, flight.aeropuertoDestino, flight.horaSalida, flight.horaLlegada],
+    );
+    return result.isNotEmpty;
   }
 
   Future <Flight> buscarID(int id) async {

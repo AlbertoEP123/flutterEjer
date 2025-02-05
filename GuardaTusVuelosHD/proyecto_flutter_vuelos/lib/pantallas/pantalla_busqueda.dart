@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/api/api_app.dart';
+import 'package:proyecto_flutter_vuelos/model/configuracion.dart';
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
+import 'package:proyecto_flutter_vuelos/pantallas/pantalla_configuracion.dart';
 import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart';
+import 'package:proyecto_flutter_vuelos/persistencia/bd_configuracion.dart';
 
 class Pantallabusqueda extends StatefulWidget {
   const Pantallabusqueda({super.key});
@@ -9,7 +12,6 @@ class Pantallabusqueda extends StatefulWidget {
   @override
   PantallabusquedaState createState() => PantallabusquedaState();
 }
-
 
 class PantallabusquedaState extends State<Pantallabusqueda> {
   // variables
@@ -20,7 +22,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   DateTime fechaVuelta = DateTime.now();
   int numeroPersonas = 1;
   bool soloIda = false;
-
   TextEditingController controladorOrigen = TextEditingController();
   TextEditingController controladorDestino = TextEditingController();
 
@@ -28,25 +29,38 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   @override
   void initState() {
     super.initState();
+    updateFavoriteStatus();
     
   }
 
-  // actualizar texto de origen
   void _updateOrigenText(String text) {
-    final codigo = ApiApp.obtenerCodigoA(text.toUpperCase()) ?? text;
-    controladorOrigen.value = TextEditingValue(
-      text: codigo,
-      selection: TextSelection.collapsed(offset: codigo.length),
-    );
+    try {
+      final codigo = ApiApp.obtenerCodigoA(text) ?? text.toUpperCase();
+      controladorOrigen.value = TextEditingValue(
+        text: codigo,
+        selection: TextSelection.collapsed(offset: codigo.length),
+      );
+    } catch (e) {
+      print('Error en _updateOrigenText: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al obtener código de aeropuerto: $e')),
+      );
+    }
   }
 
-  // actualizar texto de destino
   void _updateDestinoText(String text) {
-    final codigo = ApiApp.obtenerCodigoA(text.toUpperCase()) ?? text;
-    controladorDestino.value = TextEditingValue(
-      text: codigo,
-      selection: TextSelection.collapsed(offset: codigo.length),
-    );
+    try {
+      final codigo = ApiApp.obtenerCodigoA(text) ?? text.toUpperCase();
+      controladorDestino.value = TextEditingValue(
+        text: codigo,
+        selection: TextSelection.collapsed(offset: codigo.length),
+      );
+    } catch (e) {
+      print('Error en _updateDestinoText: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al obtener código de aeropuerto: $e')),
+      );
+    }
   }
 
   // seleccionar fecha
@@ -69,49 +83,80 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       });
     }
   }
-void _toggleFavorite(int index, Flight flight)  {
-  final dbHelper = DatabaseHelper.instance;
 
-  try {
-    if (favoriteStatus[index] ?? false) {
-      // Si ya es favorito, lo eliminamos
-      if (flight.id != null) {
-         dbHelper.deleteFavorite(flight.id!);
-      }
-    } else {
-      // Si no es favorito, lo agregamos
-       dbHelper.insertFavorite(flight.toMap());
+  // Future<void> _cargarConfiguracion() async {
+  //   try {
+  //     final config = await BdConfiguracion.loadPreferences();
+  //     if (mounted) {
+  //       setState(() {
+  //         configuracion = config;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print('Error cargando configuración: $e');
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Error cargando configuración: $e')),
+  //       );
+  //     }
+  //   }
+  // }
+
+  void updateFavoriteStatus() async {
+    final flights = await resultados;
+    for (int i = 0; i < flights.length; i++) {
+      favoriteStatus[i] = await DatabaseHelper.instance.isFavorite(flights[i]);
     }
-
-    // Luego, actualizar el estado de la interfaz de usuario (dentro de setState)
-    setState(() {
-      favoriteStatus[index] = !(favoriteStatus[index] ?? false);
-    });
-  } catch (e) {
-    // Manejar el error (por ejemplo, mostrar un SnackBar)
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error: $e')),
-    );
+    if (mounted) {
+      setState(() {});
+    }
   }
-}
+
+  void _toggleFavorite(int index, Flight flight) {
+    final dbHelper = DatabaseHelper.instance;
+
+    try {
+      if (favoriteStatus[index] ?? false) {
+        // Si ya es favorito, lo eliminamos
+        if (flight.id != null) {
+          dbHelper.deleteFavorite(flight.id!);
+        }
+      } else {
+        // Si no es favorito, lo agregamos
+        dbHelper.insertFavorite(flight.toMap());
+      }
+
+      // Luego, actualizar el estado de la interfaz de usuario (dentro de setState)
+      setState(() {
+        favoriteStatus[index] = !(favoriteStatus[index] ?? false);
+      });
+    } catch (e) {
+      // Manejar el error (por ejemplo, mostrar un SnackBar)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
   // metodo que busca vuelos con los parametros introducidos
   void _buscarVuelos() async {
     try {
       setState(() {
-        resultados =
-        // metodo que busca vuelos en la api
-        
-             ApiApp.fetchFlights(controladorOrigen.text.toUpperCase(), controladorDestino.text.toUpperCase(), fechaSalida, fechaVuelta, soloIda ? 2 : 1, numeroPersonas);
-           
+        resultados = ApiApp.fetchFlights(
+            controladorOrigen.text.toUpperCase(),
+            controladorDestino.text.toUpperCase(),
+            fechaSalida,
+            fechaVuelta,
+            soloIda ? 2 : 1,
+            numeroPersonas,
+            PantallaConfiguracionState.moneda);
       });
     } catch (e) {
       ScaffoldMessenger.of(context)
-
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
+          .showSnackBar(SnackBar(content: Text('Error al buscar vuelos: $e')));
     }
   }
 
-  
 // metodo que construye la pantalla de busqueda
   @override
   Widget build(BuildContext context) {
@@ -137,7 +182,7 @@ void _toggleFavorite(int index, Flight flight)  {
                   'assets/logo.png',
                   // Ajusta la imagen al ancho de la pantalla
                   width: double.infinity,
-                  height: 120,                
+                  height: 170,
                   fit: BoxFit.fitHeight,
                 ),
                 const SizedBox(height: 20),
@@ -148,39 +193,23 @@ void _toggleFavorite(int index, Flight flight)  {
                     Expanded(
                       child: TextField(
                         controller: controladorOrigen,
-                        onChanged: (text) {
-                          setState(() {
-                            _updateOrigenText(text);
-                          });
-                        },
-                        // Convierte el texto a mayúsculas
+                        onChanged: _updateOrigenText,
                         decoration: InputDecoration(
                           labelText: 'Origen',
-                          filled: true,
-                          fillColor: Colors.white,
+                          hintText: 'Ciudad o código IATA',
                           border: OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 16.0),
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
-                    // campo de destino
                     Expanded(
                       child: TextField(
                         controller: controladorDestino,
-                        onChanged: (text) {
-                          setState(() {
-                            _updateDestinoText(text);
-                          });
-                        },
+                        onChanged: _updateDestinoText,
                         decoration: InputDecoration(
                           labelText: 'Destino',
-                          filled: true,
-                          fillColor: Colors.white,
+                          hintText: 'Ciudad o código IATA',
                           border: OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 16.0),
                         ),
                       ),
                     ),
@@ -234,8 +263,6 @@ void _toggleFavorite(int index, Flight flight)  {
                       onChanged: (bool nuevoValor) {
                         setState(() {
                           soloIda = nuevoValor;
-                        
-                          
                         });
                       },
                     ),
@@ -287,70 +314,64 @@ void _toggleFavorite(int index, Flight flight)  {
                 FutureBuilder<List<Flight>>(
                   future: resultados,
                   builder: (context, snapshot) {
-                    // Si está cargando, muestra un indicador de progreso
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
+
                       return ListView.builder(
-                        // Para que el ListView no ocupe más espacio del necesario
                         shrinkWrap: true,
-                        // Número de elementos en la lista
                         itemCount: snapshot.data!.length,
-                        // Constructor de cada elemento de la lista
                         itemBuilder: (context, index) {
                           final flight = snapshot.data![index];
-
-                          // Obtener el estado favorito de este vuelo
                           bool isFavorite = favoriteStatus[index] ?? false;
-                          // Construir el elemento de la lista
+
                           return Card(
                             elevation: 5,
                             margin: const EdgeInsets.symmetric(vertical: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),                        
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            child: ListTile(                              
+                            child: ListTile(
                               contentPadding: const EdgeInsets.all(16),
                               leading: Icon(Icons.flight_takeoff,
                                   color: Colors.blue, size: 40),
                               title: Text(
-                                  '${flight.aeropuertoOrigen} → ${flight.aeropuertoDestino}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16)),
+                                '${flight.aeropuertoOrigen} → ${flight.aeropuertoDestino}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('Hora de salida: ${flight.horaSalida}'),
                                   Text(
                                       'Hora de llegada: ${flight.horaLlegada}'),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   IconButton(
                                     icon: Icon(
                                       Icons.favorite,
-                                      color: isFavorite
-                                          ? Colors.red
-                                          : Colors.grey, // Cambia de color
+                                      color:
+                                          isFavorite ? Colors.red : Colors.grey,
                                       size: 20,
                                     ),
                                     onPressed: () {
-                                      setState(() =>
-                                        _toggleFavorite(index, flight)
-                                      );                                     
+                                      setState(
+                                          () => _toggleFavorite(index, flight));
                                     },
                                   ),
-                                  Text("Precio: ${flight.precio} €"),
+                                  Text(
+                                      "Precio: ${flight.precio} ${flight.moneda}"),
                                 ],
                               ),
-                             
                             ),
                           );
                         },
                       );
                     } else {
-                      return Center(child: Text('No se encontraron vuelos.'));
+                      return const Center(
+                          child: Text('No se encontraron vuelos.'));
                     }
                   },
                 )
@@ -362,4 +383,3 @@ void _toggleFavorite(int index, Flight flight)  {
     );
   }
 }
-

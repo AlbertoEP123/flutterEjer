@@ -3,7 +3,9 @@ import 'package:proyecto_flutter_vuelos/model/flight.dart';
 import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart'; // Import DatabaseHelper
 
 class Pantallavuelosguardados extends StatefulWidget {
-  const Pantallavuelosguardados({super.key});
+  final VoidCallback onFavoritesChanged;
+
+  const Pantallavuelosguardados({super.key, required this.onFavoritesChanged});
 
   @override
   PantallavuelosguardadosState createState() => PantallavuelosguardadosState();
@@ -21,10 +23,11 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
   // Método para eliminar un vuelo de favoritos
   void _eliminarFavorito(Flight vuelo) async {
     if (vuelo.id != null) {
-      await DatabaseHelper.instance.deleteFavorite(vuelo.id!); // Eliminar de la base de datos
+      await DatabaseHelper.instance.deleteFavorite(vuelo.id!);
       setState(() {
-        _favoritesFuture = DatabaseHelper.instance.getFavorites(); // Actualizar la lista
+        _favoritesFuture = DatabaseHelper.instance.getFavorites();
       });
+      widget.onFavoritesChanged(); // Notificar que los favoritos han cambiado
     }
   }
 
@@ -49,7 +52,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                 Image.asset(
                   'assets/logo.png',
                   width: double.infinity,
-                  height: 120,
+                  height: 170,
                   fit: BoxFit.fitHeight,
                 ),
                 const SizedBox(height: 20),
@@ -103,6 +106,10 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                                 children: [
                                   Text('Hora de salida: ${flight.horaSalida}'),
                                   Text('Hora de llegada: ${flight.horaLlegada}'),
+                                  Text('Precio: ${flight.precio} ${flight.moneda}'),
+                                  Text('Aerolinea: ${flight.aerolinea}'),
+
+
                                   const SizedBox(height: 8),
                                 ],
                               ),
