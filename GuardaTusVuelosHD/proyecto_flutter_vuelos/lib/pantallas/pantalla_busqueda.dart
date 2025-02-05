@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/api/api_app.dart';
-import 'package:proyecto_flutter_vuelos/model/configuracion.dart';
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
 import 'package:proyecto_flutter_vuelos/pantallas/pantalla_configuracion.dart';
 import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart';
-import 'package:proyecto_flutter_vuelos/persistencia/bd_configuracion.dart';
 
 class Pantallabusqueda extends StatefulWidget {
   const Pantallabusqueda({super.key});
@@ -83,24 +81,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       });
     }
   }
-
-  // Future<void> _cargarConfiguracion() async {
-  //   try {
-  //     final config = await BdConfiguracion.loadPreferences();
-  //     if (mounted) {
-  //       setState(() {
-  //         configuracion = config;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print('Error cargando configuración: $e');
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Error cargando configuración: $e')),
-  //       );
-  //     }
-  //   }
-  // }
 
   void updateFavoriteStatus() async {
     final flights = await resultados;
