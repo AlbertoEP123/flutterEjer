@@ -1,4 +1,4 @@
-import 'dart:math'; 
+import 'dart:math'; // Importamos Random
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/drawer.dart';
 
@@ -106,11 +106,13 @@ class _FormularioState extends State<Ejercicio11> {
                   padding: const EdgeInsets.all(16),
                   margin: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
                         blurRadius: 10,
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
