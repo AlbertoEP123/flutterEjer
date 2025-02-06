@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
-import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart'; 
+import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart';
 
 class Pantallavuelosguardados extends StatefulWidget {
   final VoidCallback onFavoritesChanged;
@@ -17,7 +17,8 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
   @override
   void initState() {
     super.initState();
-    _favoritesFuture = DatabaseHelper.instance.getFavorites(); // Cargar favoritos al iniciar
+    _favoritesFuture =
+        DatabaseHelper.instance.getFavorites(); // Cargar favoritos al iniciar
   }
 
   // Método para eliminar un vuelo de favoritos
@@ -58,11 +59,10 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                 const SizedBox(height: 20),
                 Center(
                   child: const Text(
-                  'Tus vuelos guardados' ,
-                  style: TextStyle(fontSize: 20),
+                    'Tus vuelos guardados',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
-                ),
-                
                 const SizedBox(height: 20),
                 FutureBuilder<List<Flight>>(
                   future: _favoritesFuture,
@@ -70,9 +70,11 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return const Center(child: Text('Error al cargar los vuelos'));
+                      return const Center(
+                          child: Text('Error al cargar los vuelos'));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No tienes vuelos guardados'));
+                      return const Center(
+                          child: Text('No tienes vuelos guardados'));
                     } else {
                       final favoritos = snapshot.data!;
                       return ListView.builder(
@@ -100,23 +102,18 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
-                                
                               ),
-                              
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
-                                   const SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text('Fecha salida: ${flight.horaSalida}h'),
                                   Text('Fecha llegada: ${flight.horaLlegada}h'),
-                                  Text('Precio: ${flight.precio} ${flight.moneda}'),
+                                  Text(
+                                      'Precio: ${flight.precio} ${flight.moneda}'),
                                   Text('Aerolinea: ${flight.aerolinea}'),
                                   Text('Clase del vuelo: ${flight.claseVuelo}'),
                                   Text('Duracion: ${flight.maxDuracion} min'),
-
-
-                                  
                                 ],
                               ),
                               trailing: IconButton(
@@ -125,7 +122,8 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                                   color: Colors.red,
                                 ),
                                 onPressed: () {
-                                  _eliminarFavorito(flight); // Eliminar de favoritos
+                                  _eliminarFavorito(
+                                      flight); // Eliminar de favoritos
                                 },
                               ),
                             ),

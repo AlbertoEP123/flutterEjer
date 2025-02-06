@@ -32,7 +32,7 @@ class BdConfiguracion {
               where: 'type = ? AND name = ?',
               whereArgs: ['table', 'configuracion'],
             );
-
+            // 
             if (tables.isEmpty) {
               await db.execute('''
                 CREATE TABLE IF NOT EXISTS configuracion(
