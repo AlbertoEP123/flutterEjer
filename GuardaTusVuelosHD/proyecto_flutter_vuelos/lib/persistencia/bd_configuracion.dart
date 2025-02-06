@@ -17,7 +17,6 @@ class BdConfiguracion {
           path,
           version: 1,
           onCreate: (Database db, int version) async {
-            print('Creating configuracion table...');
             await db.execute('''
               CREATE TABLE configuracion(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,7 +34,6 @@ class BdConfiguracion {
             );
 
             if (tables.isEmpty) {
-              print('Table does not exist, creating...');
               await db.execute('''
                 CREATE TABLE IF NOT EXISTS configuracion(
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,7 +59,7 @@ class BdConfiguracion {
 
       await loadPreferences();
     } catch (e) {
-      print('Error initializing database: $e');
+      e.toString();
     }
     return _database!;
   }
@@ -79,7 +77,7 @@ class BdConfiguracion {
       Configuracion.idioma = idioma;
 
     } catch (e) {
-      print('Error saving preferences: $e');
+      e.toString();
     }
   }
 
@@ -94,7 +92,7 @@ class BdConfiguracion {
         Configuracion.idioma = results.first['idioma'] as String;
       }
     } catch (e) {
-      print('Error loading preferences: $e');
+      e.toString();
     }
   }
 }

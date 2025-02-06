@@ -7,6 +7,8 @@ class Flight {
   final int? precio;
   final String? aerolinea;
   final String? moneda;
+  final String? claseVuelo;
+  final int? maxDuracion;
 
   const Flight({
     this.id,
@@ -16,9 +18,11 @@ class Flight {
     this.horaLlegada,
     this.precio,
     this.aerolinea,
-    this.moneda
+    this.moneda,
+    this.claseVuelo,
+    this.maxDuracion
   });
-
+  
   // Convertir un Flight a un Map para la base de datos
   Map<String, dynamic> toMap() {
     return {
@@ -29,7 +33,9 @@ class Flight {
       'horaLlegada': horaLlegada,
       'precio': precio,
       'aerolinea': aerolinea,
-      'moneda' : moneda
+      'moneda' : moneda,
+      'claseVuelo' : claseVuelo,
+      'maxDuracion' : maxDuracion
     };
   }
 
@@ -42,7 +48,9 @@ class Flight {
       horaLlegada: json['flights'][0]['arrival_airport']['time'],
       precio: json['price'],
       aerolinea: json['flights'][0]['airline'],
-      moneda:moneda
+      moneda:moneda,
+      claseVuelo: json['flights'][0]['travel_class'],
+      maxDuracion: json['flights'][0]['duration']
     );
   }
 
@@ -56,7 +64,10 @@ class Flight {
       horaLlegada: map['horaLlegada'],
       precio: map['precio'],
       aerolinea: map['aerolinea'],
-      moneda: map['moneda']
+      moneda: map['moneda'],
+      claseVuelo: map['claseVuelo'],
+      maxDuracion: map['maxDuracion']
+      
     );
   }
 

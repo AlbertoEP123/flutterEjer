@@ -25,13 +25,8 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
     super.initState();
     
   }
-
-  
-
   @override
   Widget build(BuildContext context) {
-   
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -65,7 +60,6 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
                       if (newValue != null) {
                         setState(() {
                           moneda = newValue;
-                          print(moneda);
                         });
                       }
                     },
@@ -78,28 +72,7 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
                     }).toList(),
                     isExpanded: true,
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Configuración de idioma
-                  DropdownButton<String>(
-                    value: idioma,
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          idioma = newValue;
-                        });
-                      }
-                    },
-                    items: ['Español', 'Inglés', 'Francés', 'Alemán']
-                        .map<DropdownMenuItem<String>>((String valor) {
-                      return DropdownMenuItem<String>(
-                        value: valor,
-                        child: Text('Idioma: $valor'),
-                      );
-                    }).toList(),
-                    isExpanded: true,
-                  ),
+                  
 
                   const SizedBox(height: 20),
 

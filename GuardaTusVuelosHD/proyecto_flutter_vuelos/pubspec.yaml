@@ -40,6 +40,8 @@ dependencies:
   sqflite_common_ffi: ^2.0.0
   path_provider: ^2.0.0
   path: ^1.8.0
+  provider: ^6.0.0
+
 
 
 dev_dependencies:

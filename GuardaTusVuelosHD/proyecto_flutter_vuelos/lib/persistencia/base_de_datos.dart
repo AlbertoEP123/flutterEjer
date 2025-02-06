@@ -30,7 +30,9 @@ class DatabaseHelper {
       horaLlegada TEXT,
       precio INTEGER,
       aerolinea TEXT,
-      moneda TEXT
+      moneda TEXT,
+      claseVuelo TEXT,
+      maxDuracion INTEGER
     )
   ''');
 }

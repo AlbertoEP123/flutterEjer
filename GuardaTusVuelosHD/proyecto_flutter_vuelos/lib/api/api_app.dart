@@ -19,15 +19,23 @@ static Future<List<Flight>> fetchFlights(
     // Realiza la petición HTTP
     try {
       final response = await http.get(Uri.parse(url));
-      
+      print(response.body);
+      print(response.statusCode);
       // Comprueba si la petición ha sido correcta
       if (response.statusCode == 200) {
         var jsonBody = json.decode(response.body);
         // Parsear el JSON
-        var data = jsonBody['best_flights']as List;
+        List data;
+        try {
+          data = jsonBody['best_flights']as List;
         if(data.isEmpty){
           data = jsonBody['other_flights']as List;
         }
+        } catch (e) {
+          var variable = json.decode(response.body)['error'];
+        throw Exception('Error al obtener los vuelos. $variable');
+        }
+        
         String moneda = jsonBody['search_parameters']['currency'];
         // Mapear los vuelos
         List<Flight> vuelos =
@@ -47,11 +55,12 @@ static Future<List<Flight>> fetchFlights(
           
         }).toList();
       } else {
-        throw Exception(
-            'Error al obtener los vuelos. Código: ${response.statusCode}');
+        throw Exception("error en la peticion");
       }
-    } catch (e) {
-      throw Exception('Error al obtener los vuelos');
+    } catch (e, stackTrace) {
+      
+      print(stackTrace);
+      throw Exception(e);
     }
   }
 
@@ -68,12 +77,29 @@ static Future<List<Flight>> fetchFlights(
       "Bilbao": "BIO",
       "Málaga": "AGP",
       "Palma De Mallorca": "PMI",
-      "Las Palmas De Gran Canaria": "LPA",
       "Tenerife": "TFN",
       "Santiago De Compostela": "SCQ",
-      "Vigo": "VGO",
-      "Murcia": "MJV",
       "Ibiza": "IBZ",
+      "Londres": "LHR",
+      "París": "CDG",
+      "Berlín": "BER",
+      "Roma": "FCO",
+      "Ámsterdam": "AMS",
+      "Viena": "VIE",
+      "Praga": "PRG",
+      "Bruselas": "BRU",
+      "Copenhague": "CPH",
+      "Estocolmo": "ARN",
+      "Dublín": "DUB",
+      "Helsinki": "HEL",
+      "Lisboa": "LIS",
+      "Varsovia": "WAW",
+      "Budapest": "BUD",
+      "Atenas": "ATH",
+      "Oslo": "OSL",
+      "Zúrich": "ZRH",
+      "Moscú": "SVO",
+      "Estambul": "IST"
      
     };
     

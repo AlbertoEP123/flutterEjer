@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/model/flight.dart';
-import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart'; // Import DatabaseHelper
+import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart'; 
 
 class Pantallavuelosguardados extends StatefulWidget {
   final VoidCallback onFavoritesChanged;
@@ -100,17 +100,23 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
+                                
                               ),
+                              
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Hora de salida: ${flight.horaSalida}'),
-                                  Text('Hora de llegada: ${flight.horaLlegada}'),
+
+                                   const SizedBox(height: 5),
+                                  Text('Fecha salida: ${flight.horaSalida}h'),
+                                  Text('Fecha llegada: ${flight.horaLlegada}h'),
                                   Text('Precio: ${flight.precio} ${flight.moneda}'),
                                   Text('Aerolinea: ${flight.aerolinea}'),
+                                  Text('Clase del vuelo: ${flight.claseVuelo}'),
+                                  Text('Duracion: ${flight.maxDuracion} min'),
 
 
-                                  const SizedBox(height: 8),
+                                  
                                 ],
                               ),
                               trailing: IconButton(

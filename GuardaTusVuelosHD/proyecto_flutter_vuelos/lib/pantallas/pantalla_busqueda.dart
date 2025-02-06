@@ -39,7 +39,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
         selection: TextSelection.collapsed(offset: codigo.length),
       );
     } catch (e) {
-      print('Error en _updateOrigenText: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al obtener código de aeropuerto: $e')),
       );
@@ -54,7 +53,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
         selection: TextSelection.collapsed(offset: codigo.length),
       );
     } catch (e) {
-      print('Error en _updateDestinoText: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al obtener código de aeropuerto: $e')),
       );
