@@ -22,13 +22,27 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   bool soloIda = false;
   TextEditingController controladorOrigen = TextEditingController();
   TextEditingController controladorDestino = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   // inicizalizo variable resultados
   @override
   void initState() {
     super.initState();
     updateFavoriteStatus();
-    
+  }
+  
+  bool validacion() {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return true;
+    }
+    if(fechaVuelta.isBefore(fechaSalida)){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La fecha de vuelta no puede ser anterior a la fecha de salida')),
+      );
+      return true;
+    }
+    return false;
+
   }
 
   void _updateOrigenText(String text) {
@@ -79,16 +93,21 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
       });
     }
   }
+ void updateFavoriteStatus() async {
+  // Obtiene la lista de vuelos almacenada en la variable 'resultados'.
+  final flights = await resultados;
 
-  void updateFavoriteStatus() async {
-    final flights = await resultados;
-    for (int i = 0; i < flights.length; i++) {
-      favoriteStatus[i] = await DatabaseHelper.instance.isFavorite(flights[i]);
-    }
-    if (mounted) {
-      setState(() {});
-    }
+  for (int i = 0; i < flights.length; i++) {
+    // Verifica si el vuelo actual es favorito y almacena el resultado en el mapa 'favoriteStatus'.
+    favoriteStatus[i] = await DatabaseHelper.instance.isFavorite(flights[i]);
   }
+
+  // Si el widget aún está montado (es decir, no ha sido eliminado del árbol de widgets),
+  // actualiza el estado del widget para reflejar los cambios en la interfaz de usuario.
+  if (mounted) {
+    setState(() {});
+  }
+}
 
   void _toggleFavorite(int index, Flight flight) {
     final dbHelper = DatabaseHelper.instance;
@@ -118,6 +137,9 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
 
   // metodo que busca vuelos con los parametros introducidos
   void _buscarVuelos() async {
+    if (validacion()) {
+      return;
+    }
     try {
       setState(() {
         resultados = ApiApp.fetchFlights(
@@ -166,32 +188,47 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                 const SizedBox(height: 20),
 
                 // Campo de origen
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: controladorOrigen,
-                        onChanged: _updateOrigenText,
-                        decoration: InputDecoration(
-                          labelText: 'Origen',
-                          hintText: 'Ciudad o código IATA',
-                          border: OutlineInputBorder(),
+                Form(
+                  key: _formKey,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: controladorOrigen,
+                          onChanged: _updateOrigenText,
+                          decoration: InputDecoration(
+                            labelText: 'Origen',
+                            hintText: 'Ciudad o código IATA',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor, ingresa un origen';
+                            }
+                            return null;
+                          },
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: controladorDestino,
-                        onChanged: _updateDestinoText,
-                        decoration: InputDecoration(
-                          labelText: 'Destino',
-                          hintText: 'Ciudad o código IATA',
-                          border: OutlineInputBorder(),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextFormField(
+                          controller: controladorDestino,
+                          onChanged: _updateDestinoText,
+                          decoration: InputDecoration(
+                            labelText: 'Destino',
+                            hintText: 'Ciudad o código IATA',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor, ingresa un destino';
+                            }
+                            return null;
+                          },
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 20),
@@ -226,6 +263,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                           child: Text('${fechaVuelta.toLocal()}'.split(' ')[0]),
                         ),
                       ),
+                      
                     ),
                   ],
                 ),
@@ -297,7 +335,6 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,

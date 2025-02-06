@@ -15,12 +15,11 @@ static Future<List<Flight>> fetchFlights(
     }else{
       url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&type=$tipo&hl=en&currency=$moneda&adults=$nPasajeros&api_key=22444223f4ca84ed0407a56f4ff1c3f114f084d21a77640369c4b6020000da38";
     }
-    print(url);
+    //print(url);
     // Realiza la petición HTTP
-    try {
       final response = await http.get(Uri.parse(url));
-      print(response.body);
-      print(response.statusCode);
+      //print(response.body);
+      //print(response.statusCode);
       // Comprueba si la petición ha sido correcta
       if (response.statusCode == 200) {
         var jsonBody = json.decode(response.body);
@@ -55,13 +54,10 @@ static Future<List<Flight>> fetchFlights(
           
         }).toList();
       } else {
-        throw Exception("error en la peticion");
+       // print(response.statusCode);
+        throw Exception("Error en la petición");
       }
-    } catch (e, stackTrace) {
-      
-      print(stackTrace);
-      throw Exception(e);
-    }
+    
   }
 
   // Método para obtener los códigos de aeropuertos
