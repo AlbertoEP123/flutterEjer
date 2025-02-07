@@ -29,6 +29,8 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
   void initState() {
     super.initState();
     updateFavoriteStatus();
+
+    
   }
   
   // metodo validacion de campos
@@ -115,19 +117,14 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     final dbHelper = DatabaseHelper.instance;
 
     try {
-      if (favoriteStatus[index] ?? false) {
+      if (!(favoriteStatus[index] ?? false)) {
         // Si ya es favorito, lo eliminamos
-        if (flight.id != null) {
-          dbHelper.deleteFavorite(flight.id!);
-        }
-      } else {
-        // Si no es favorito, lo agregamos
-        dbHelper.insertFavorite(flight.toMap());
-      }
+       dbHelper.insertFavorite(flight.toMap());
+      } 
 
       // Luego, actualizar el estado de la interfaz de usuario (dentro de setState)
       setState(() {
-        favoriteStatus[index] = !(favoriteStatus[index] ?? false);
+        favoriteStatus[index] =true;
       });
     } catch (e) {
       // Manejar el error (por ejemplo, mostrar un SnackBar)
