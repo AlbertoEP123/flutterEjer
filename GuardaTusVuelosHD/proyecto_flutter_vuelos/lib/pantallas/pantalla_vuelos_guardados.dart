@@ -18,11 +18,13 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
   void initState() {
     super.initState();
     _favoritesFuture =
-        DatabaseHelper.instance.getFavorites(); // Cargar favoritos al iniciar
+        DatabaseHelper.instance.getFavorites(); 
   }
 
   // Método para eliminar un vuelo de favoritos
   void _eliminarFavorito(Flight vuelo) async {
+    // si la id del vuelo no es nulo, llamo al metodo de la base de datos que elimina el id
+    // y reflejo el cambio en la lista de favoritos
     if (vuelo.id != null) {
       await DatabaseHelper.instance.deleteFavorite(vuelo.id!);
       setState(() {
@@ -32,6 +34,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
     }
   }
 
+  // diseño parecido a demas pantallas
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +67,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // future builder de la lista de los vuelos favoritos, igual que en pantalla busqueda
                 FutureBuilder<List<Flight>>(
                   future: _favoritesFuture,
                   builder: (context, snapshot) {
@@ -77,6 +81,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                           child: Text('No tienes vuelos guardados'));
                     } else {
                       final favoritos = snapshot.data!;
+                      // returna un listview  con scroll
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -105,6 +110,7 @@ class PantallavuelosguardadosState extends State<Pantallavuelosguardados> {
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                // Detalles de los vuelos
                                 children: [
                                   const SizedBox(height: 5),
                                   Text('Fecha salida: ${flight.horaSalida}h'),

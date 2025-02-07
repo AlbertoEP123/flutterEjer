@@ -25,6 +25,7 @@ class BdConfiguracion {
               )
             ''');
           },
+            // Código para ejecutar cuando se abre la base de datos
           onOpen: (Database db) async {
             // Verificar si la tabla existe
             final tables = await db.query(
@@ -32,7 +33,7 @@ class BdConfiguracion {
               where: 'type = ? AND name = ?',
               whereArgs: ['table', 'configuracion'],
             );
-            // 
+            // Si esta vacia..
             if (tables.isEmpty) {
               await db.execute('''
                 CREATE TABLE IF NOT EXISTS configuracion(
@@ -63,7 +64,7 @@ class BdConfiguracion {
     }
     return _database!;
   }
-
+  // Funcion para guardar las preferencias de moneda y idioma
   Future<void> savePreferences(String moneda, String idioma) async {
     try {
       if (_database == null) return;
@@ -81,6 +82,7 @@ class BdConfiguracion {
     }
   }
 
+ // Este nmetodo contiene las configuracion de la base de datos y se usa para manejar la perssencia
   static Future<void> loadPreferences() async {
     try {
       if (_database == null) return;
@@ -96,6 +98,7 @@ class BdConfiguracion {
     }
   }
 }
+
 
 class Sqflite {
   static int? firstIntValue(List<Map<String, Object?>> list) {

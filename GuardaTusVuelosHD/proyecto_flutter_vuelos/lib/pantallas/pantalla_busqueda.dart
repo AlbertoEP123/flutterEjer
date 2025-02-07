@@ -31,6 +31,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     updateFavoriteStatus();
   }
   
+  // metodo validacion de campos
   bool validacion() {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return true;
@@ -44,7 +45,8 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     return false;
 
   }
-
+ 
+ // metodos campos origen y destino para covertirlo en codigo iata llamando al metodo de apiapp
   void _updateOrigenText(String text) {
     try {
       final codigo = ApiApp.obtenerCodigoA(text) ?? text.toUpperCase();
@@ -102,7 +104,7 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
     favoriteStatus[i] = await DatabaseHelper.instance.isFavorite(flights[i]);
   }
 
-  // Si el widget aún está montado (es decir, no ha sido eliminado del árbol de widgets),
+  // Si el widget aún está montado,
   // actualiza el estado del widget para reflejar los cambios en la interfaz de usuario.
   if (mounted) {
     setState(() {});
@@ -360,9 +362,9 @@ class PantallabusquedaState extends State<Pantallabusqueda> {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Hora de salida: ${flight.horaSalida}'),
+                                  Text('Fecha y hora de salida: ${flight.horaSalida}'),
                                   Text(
-                                      'Hora de llegada: ${flight.horaLlegada}'),
+                                      'Fecha y hora de llegada: ${flight.horaLlegada}'),
                                   const SizedBox(height: 8),
                                   IconButton(
                                     icon: Icon(

@@ -17,6 +17,7 @@ Future<void> _botonPref(String moneda, String idioma) async {
 }
 
 class PantallaConfiguracionState extends State<PantallaConfiguracion> {
+  // variables estaticas moneda y idioma
   static String moneda = 'USD';
   static String idioma = 'Español';
 
@@ -57,6 +58,7 @@ class PantallaConfiguracionState extends State<PantallaConfiguracion> {
                   DropdownButton<String>(
                     value: moneda,
                     onChanged: (String? newValue) {
+                      // si el nuevo valor no es nulo lo cambio
                       if (newValue != null) {
                         setState(() {
                           moneda = newValue;

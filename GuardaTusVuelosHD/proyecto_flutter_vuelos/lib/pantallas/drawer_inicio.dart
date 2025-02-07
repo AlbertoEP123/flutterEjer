@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/pantallas/pantalla_busqueda.dart';
 import 'package:proyecto_flutter_vuelos/pantallas/pantalla_configuracion.dart';
+import 'package:proyecto_flutter_vuelos/pantallas/pantalla_creditos.dart';
 import 'package:proyecto_flutter_vuelos/pantallas/pantalla_vuelos_guardados.dart';
 
 class Drawerinicio extends StatefulWidget {
@@ -28,6 +29,7 @@ class DrawerinicioState extends State<Drawerinicio> {
       Pantallabusqueda(key: _busquedaKey),
       Pantallavuelosguardados(onFavoritesChanged: _updateFavorites),
       const PantallaConfiguracion(),
+      const PantallaCreditos(),
     ];
   }
 
@@ -45,7 +47,7 @@ class DrawerinicioState extends State<Drawerinicio> {
     });
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final bottomNavHeight = 70.0;
@@ -71,25 +73,39 @@ class DrawerinicioState extends State<Drawerinicio> {
               _buildNavItem(0, Icons.search, "Búsqueda"),
               _buildNavItem(1, Icons.bookmark, "Guardados"),
               _buildNavItem(2, Icons.settings, "Configuración"),
+              _buildNavItem(3, Icons.info, "Creditos"),
+
             ],
           ),
         ),
       ),
     );
   }
-
-// Método para construir un item de la barra de navegación
-
+  //Construye un ítem de la barra de navegación inferior. Cambia el color del ícono 
+  //y el texto dependiendo de si el ítem está seleccionado o no.
   Widget _buildNavItem(int index, IconData icon, String label) {
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.25,
+    final isSelected = _selectedIndex == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _onItemTapped(index),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 30, color: Colors.blue),
-            Text(label, style: const TextStyle(color: Colors.blue)),
+            Icon(
+              icon,
+              size: 24,
+              color: isSelected ? Colors.blue : Colors.grey,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? Colors.blue : Colors.grey,
+                fontSize: 12,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),

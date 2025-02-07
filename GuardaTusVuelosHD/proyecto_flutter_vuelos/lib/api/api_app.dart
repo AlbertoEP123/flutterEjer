@@ -11,9 +11,9 @@ static Future<List<Flight>> fetchFlights(
   String url ;
   // Si el tipo es 1, es un vuelo de ida y vuelta
     if(tipo==1){
-      url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&return_date=${fechaVuelta.toString().substring(0,10)}&type=$tipo&currency=$moneda&hl=en&adults=$nPasajeros&api_key=22444223f4ca84ed0407a56f4ff1c3f114f084d21a77640369c4b6020000da38";
+      url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&return_date=${fechaVuelta.toString().substring(0,10)}&type=$tipo&currency=$moneda&hl=en&adults=$nPasajeros&api_key=6c392d9e051722bd171279078039f7322f9ddbf721ba821d844b46ca4daacc62";
     }else{
-      url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&type=$tipo&hl=en&currency=$moneda&adults=$nPasajeros&api_key=22444223f4ca84ed0407a56f4ff1c3f114f084d21a77640369c4b6020000da38";
+      url = "https://serpapi.com/search.json?engine=google_flights&departure_id=$ciudadOrigen&arrival_id=$ciudadDestino&outbound_date=${fechaSalida.toString().substring(0,10)}&type=$tipo&hl=en&currency=$moneda&adults=$nPasajeros&api_key=6c392d9e051722bd171279078039f7322f9ddbf721ba821d844b46ca4daacc62";
     }
     //print(url);
     // Realiza la petición HTTP
