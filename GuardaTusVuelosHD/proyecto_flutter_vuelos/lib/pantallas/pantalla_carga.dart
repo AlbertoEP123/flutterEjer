@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_flutter_vuelos/pantallas/drawer_inicio.dart';
+import 'package:proyecto_flutter_vuelos/persistencia/base_de_datos.dart';
+import 'package:proyecto_flutter_vuelos/persistencia/bd_configuracion.dart';
 
 class PantallaCarga extends StatelessWidget {
   const PantallaCarga({super.key});
 
   @override
   Widget build(BuildContext context) {
+    BdConfiguracion.initDatabase();
+      DatabaseHelper.database;
+
     // Simula una carga de 8 segundos
     Future.delayed(const Duration(seconds: 8), () {
       Navigator.pushReplacement(
