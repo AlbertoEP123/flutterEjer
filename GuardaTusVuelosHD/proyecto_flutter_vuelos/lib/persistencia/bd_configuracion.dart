@@ -1,22 +1,22 @@
 import 'package:proyecto_flutter_vuelos/model/configuracion.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
 class BdConfiguracion {
   static Database? _database;
- 
+
   // Inicializa la base de datos
   static Future<Database> initDatabase() async {
     try {
-      sqfliteFfiInit();
       if (_database == null) {
-        // Asegurarse de que sqflite_ffi está inicializado
-        sqfliteFfiInit();
+        var databasePath = await getDatabasesPath();
+        String path = '$databasePath/configuracion.db';
 
-        final path = './lib/persistencia/configuracion.db';
+        // Abrir la base de datos
         _database = await openDatabase(
           path,
           version: 1,
           onCreate: (Database db, int version) async {
+            // Crear la tabla si no existe
             await db.execute('''
               CREATE TABLE configuracion(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +25,6 @@ class BdConfiguracion {
               )
             ''');
           },
-            // Código para ejecutar cuando se abre la base de datos
           onOpen: (Database db) async {
             // Verificar si la tabla existe
             final tables = await db.query(
@@ -33,10 +32,10 @@ class BdConfiguracion {
               where: 'type = ? AND name = ?',
               whereArgs: ['table', 'configuracion'],
             );
-            // Si esta vacia..
+            // Si no existe, la crea
             if (tables.isEmpty) {
               await db.execute('''
-                CREATE TABLE IF NOT EXISTS configuracion(
+                CREATE TABLE configuracion(
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                   moneda TEXT NOT NULL,
                   idioma TEXT NOT NULL
@@ -46,11 +45,12 @@ class BdConfiguracion {
           },
         );
 
-        // Insertar valores por defecto si la tabla está vacía
+        // Verificar si ya hay datos en la tabla
         final count = Sqflite.firstIntValue(
             await _database!.rawQuery('SELECT COUNT(*) FROM configuracion'));
 
         if (count == 0) {
+          // Insertar valores por defecto si la tabla está vacía
           await _database!.insert('configuracion', {
             'moneda': 'EUR',
             'idioma': 'ESP',
@@ -58,47 +58,57 @@ class BdConfiguracion {
         }
       }
 
+      // Cargar las preferencias por defecto
       await loadPreferences();
     } catch (e) {
-      e.toString();
+      //print('Error al inicializar la base de datos: ${e.toString()}');
+      rethrow; // Lanza el error para poder capturarlo fuera de la función si es necesario
     }
+
     return _database!;
   }
-  // Funcion para guardar las preferencias de moneda y idioma
+
+  // Función para guardar las preferencias de moneda y idioma
   Future<void> savePreferences(String moneda, String idioma) async {
     try {
       if (_database == null) return;
 
+      // Eliminar las configuraciones anteriores
       await _database!.delete('configuracion');
+
+      // Insertar las nuevas configuraciones
       await _database!.insert('configuracion', {
         'moneda': moneda,
         'idioma': idioma,
       });
+
+      // Actualizar las preferencias globales
       Configuracion.moneda = moneda;
       Configuracion.idioma = idioma;
-
     } catch (e) {
-      e.toString();
+      //print('Error al guardar preferencias: ${e.toString()}');
     }
   }
 
- // Este nmetodo contiene las configuracion de la base de datos y se usa para manejar la perssencia
+  // Método para cargar las preferencias desde la base de datos
   static Future<void> loadPreferences() async {
     try {
       if (_database == null) return;
 
+      // Consultar la tabla de configuración
       final List<Map<String, dynamic>> results =
           await _database!.query('configuracion');
+      
       if (results.isNotEmpty) {
+        // Cargar las preferencias en la clase Configuracion
         Configuracion.moneda = results.first['moneda'] as String;
         Configuracion.idioma = results.first['idioma'] as String;
       }
     } catch (e) {
-      e.toString();
+      //print('Error al cargar preferencias: ${e.toString()}');
     }
   }
 }
-
 
 class Sqflite {
   static int? firstIntValue(List<Map<String, Object?>> list) {
