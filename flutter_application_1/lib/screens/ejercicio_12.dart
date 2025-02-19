@@ -350,9 +350,12 @@ class _FormularioStateSwitch extends State<Ejercicio12> {
                                         onChanged: (int? newValue) {
                                           setState(() {
                                             _numeroHijos = newValue;
+                                            
                                           });
                                           Navigator.of(context).pop();
+                                          
                                         },
+                                        
                                       ),
                                     );
                                   },
@@ -360,7 +363,11 @@ class _FormularioStateSwitch extends State<Ejercicio12> {
                               }
                             });
                           },
+                          
                         ),
+                         if (_numeroHijos != null) 
+                           Text("Número de hijos: $_numeroHijos"),
+
                         const SizedBox(height: 16),
                         ElevatedButton(
                             onPressed: _verificoForm, child: const Text("Enviar")),
