@@ -271,12 +271,7 @@ class _FormularioState extends State<Ejercicio11> {
                   margin: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
+                   
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,13 +280,13 @@ class _FormularioState extends State<Ejercicio11> {
                         'Adivina el Número',
                         style: TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 20),
                       const Text(
                         'Adivina el número entre 1 y 100:',
                         style: TextStyle(fontSize: 18),
+                      
                       ),
                       const SizedBox(height: 20),
                       // Campo de texto para el número
@@ -319,11 +314,8 @@ class _FormularioState extends State<Ejercicio11> {
                           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         ),
                         child: const Text('Verificar', style: TextStyle(fontSize: 16)),
-                        ),
-                    
-                    
-                     
-                      
+                        ),                 
+                                                         
                       const SizedBox(height: 20),
                       Text(
                         _mensaje,
